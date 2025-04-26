@@ -28,12 +28,15 @@ export function ThemeToggle() {
     >
       <motion.div
         initial={false}
-        animate={{ rotate: theme === "light" ? 0 : 180 }}
+        animate={{ 
+          rotate: theme === "light" ? 0 : 180,
+          scale: [1, 1.2, 1]
+        }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="absolute inset-0 flex items-center justify-center"
       >
-        <Sun className={`h-[1.2rem] w-[1.2rem] absolute ${theme === "light" ? "opacity-100" : "opacity-0"} transition-opacity`} />
-        <Moon className={`h-[1.2rem] w-[1.2rem] absolute ${theme === "light" ? "opacity-0" : "opacity-100"} transition-opacity`} />
+        <Sun className={`h-[1.2rem] w-[1.2rem] absolute ${theme === "light" ? "opacity-100" : "opacity-0"} transition-all duration-300`} />
+        <Moon className={`h-[1.2rem] w-[1.2rem] absolute ${theme === "light" ? "opacity-0" : "opacity-100"} transition-all duration-300`} />
       </motion.div>
       <span className="sr-only">Toggle theme</span>
     </Button>

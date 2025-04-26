@@ -46,16 +46,22 @@ export default function Hero() {
       {/* Video background */}
       <div className="absolute inset-0 w-full h-full z-0">
         <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <video 
-          key={currentReel}
-          autoPlay 
-          muted 
-          loop
-          playsInline
-          className="absolute w-full h-full object-cover"
-        >
-          <source src={reels[currentReel]} type="video/mp4" />
-        </video>
+        {reels.map((videoSrc, index) => (
+          <video 
+            key={videoSrc}
+            autoPlay 
+            muted 
+            loop
+            playsInline
+            className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
+              currentReel === index ? "opacity-100" : "opacity-0"
+            }`}
+            onLoadedData={() => console.log(`Video ${index} loaded`)}
+          >
+            <source src={videoSrc} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ))}
       </div>
       
       {/* Background pattern */}

@@ -1,6 +1,7 @@
 
 import Hero from "@/components/home/Hero";
 import About from "@/components/home/About";
+import TechBlogsSection from "@/components/home/TechBlogsSection";
 import ResumeSection from "@/components/resume/ResumeSection";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { Link } from "react-router-dom";
@@ -72,6 +73,9 @@ const Index = () => {
 
       {/* About Section */}
       <About />
+
+      {/* Tech Blogs Section - NEW SECTION */}
+      <TechBlogsSection />
 
       {/* Featured Projects Section */}
       <section className="py-20 bg-secondary/30">

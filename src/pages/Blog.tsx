@@ -3,6 +3,9 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowRight, Book, Code, Terminal, Server, Database, Settings } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Sample blog posts
 const allPosts: BlogPost[] = [
@@ -59,7 +62,46 @@ const allPosts: BlogPost[] = [
     date: "Nov 05, 2022",
     category: "DevOps",
     readTime: "14 min read"
+  },
+  {
+    id: "ar-mobile-apps",
+    title: "Building AR Experiences in Mobile Apps: A Complete Guide",
+    excerpt: "Learn how to integrate augmented reality features in your mobile applications to create immersive user experiences.",
+    coverImage: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620",
+    date: "Oct 18, 2022",
+    category: "AR/VR",
+    readTime: "16 min read"
+  },
+  {
+    id: "mobile-design-trends",
+    title: "Top Mobile UI/UX Design Trends to Watch in 2023",
+    excerpt: "Stay ahead of the curve with these emerging design patterns and user experience trends in mobile app development.",
+    coverImage: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e",
+    date: "Sep 22, 2022",
+    category: "Design",
+    readTime: "9 min read"
+  },
+  {
+    id: "ai-mobile-development",
+    title: "Integrating AI into Mobile Apps: Practical Applications",
+    excerpt: "Discover how to incorporate artificial intelligence capabilities into your mobile applications for enhanced functionality.",
+    coverImage: "https://images.unsplash.com/photo-1677442135136-760c813028f1",
+    date: "Aug 15, 2022",
+    category: "AI",
+    readTime: "13 min read"
   }
+];
+
+// Tech categories with icons
+const techCategories = [
+  { name: "All", icon: Book },
+  { name: "React Native", icon: Code },
+  { name: "iOS", icon: Terminal },
+  { name: "Android", icon: Terminal },
+  { name: "DevOps", icon: Server },
+  { name: "AI", icon: Database },
+  { name: "Design", icon: Settings },
+  { name: "AR/VR", icon: Code },
 ];
 
 // Extract unique categories
@@ -67,6 +109,7 @@ const categories = Array.from(new Set(allPosts.map(post => post.category))).sort
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   
   const filteredPosts = selectedCategory
     ? allPosts.filter(post => post.category === selectedCategory)
@@ -77,43 +120,72 @@ const Blog = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h1 className="text-4xl font-bold mb-4">Blog</h1>
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4"
+            >
+              DEVELOPER INSIGHTS
+            </motion.span>
+            <h1 className="text-5xl font-bold mb-6">Tech Blog</h1>
             <p className="text-muted-foreground">
-              Insights, tutorials and thoughts on mobile app development,
-              UX design, and tech industry trends.
+              In-depth articles, tutorials, and insights on mobile app development,
+              UX design, and emerging technologies.
             </p>
           </div>
         </AnimatedSection>
 
         <AnimatedSection delay={100}>
-          <div className="flex flex-wrap gap-2 justify-center mb-12">
-            <Button
-              variant={selectedCategory === null ? "default" : "outline"}
-              onClick={() => setSelectedCategory(null)}
-              className="rounded-full"
-              size="sm"
-            >
-              All
-            </Button>
-            
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className="rounded-full"
-                size="sm"
-              >
-                {category}
-              </Button>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 mb-16">
+            {techCategories.map((category, index) => {
+              const isActive = category.name === "All" ? selectedCategory === null : selectedCategory === category.name;
+              const CategoryIcon = category.icon;
+              
+              return (
+                <motion.div 
+                  key={category.name} 
+                  className="relative"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Card 
+                    className={`flex flex-col items-center justify-center p-3 h-full cursor-pointer transition-all ${
+                      isActive ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary/80'
+                    }`}
+                    onClick={() => setSelectedCategory(category.name === "All" ? null : category.name)}
+                  >
+                    <motion.div 
+                      animate={{ 
+                        scale: hoveredIndex === index || isActive ? 1.1 : 1,
+                        rotate: hoveredIndex === index ? [0, 10, -5, 0] : 0
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="mb-2"
+                    >
+                      <CategoryIcon className="h-6 w-6" />
+                    </motion.div>
+                    <span className="text-xs font-medium">{category.name}</span>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </AnimatedSection>
 
         <AnimatedSection delay={200}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {filteredPosts.map((post) => (
-              <BlogCard key={post.id} post={post} />
+            {filteredPosts.map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <BlogCard post={post} />
+              </motion.div>
             ))}
           </div>
           
@@ -138,7 +210,14 @@ const Blog = () => {
             <p className="text-muted-foreground mb-4">
               Looking for more content?
             </p>
-            <Button variant="outline">Load More Articles</Button>
+            <Button 
+              variant="default"
+              size="lg"
+              className="group bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-600 border-0 text-white"
+            >
+              Subscribe to Newsletter
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
           </div>
         </AnimatedSection>
       </div>
