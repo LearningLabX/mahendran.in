@@ -1,5 +1,4 @@
-
-import { ArrowRight } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -54,7 +53,7 @@ export default function Hero() {
               className="inline-flex items-center px-3 py-1 rounded-full border border-primary/40 bg-primary/5 backdrop-blur-sm mb-8"
             >
               <span className="inline-block w-2 h-2 rounded-full bg-primary mr-2"></span>
-              <span className="text-primary/90">Mobile App Developer</span>
+              <span className="text-primary/90">Flutter Mobile App Developer</span>
             </motion.div>
 
             {/* Main title */}
@@ -64,11 +63,11 @@ export default function Hero() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight"
             >
-              Building{' '}
+              Crafting{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
-                Native-Quality
+                Exceptional
               </span>{' '}
-              Mobile Apps
+              Mobile Experiences
             </motion.h1>
 
             {/* Description */}
@@ -78,8 +77,8 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
             >
-              Specialized in Flutter development, creating performant and beautiful cross-platform 
-              applications with modern UI/UX practices.
+              Transforming ideas into high-performance, user-centric mobile applications 
+              using Flutter and cutting-edge mobile development practices.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -95,12 +94,12 @@ export default function Hero() {
                 className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 transition-opacity"
               >
                 <Link to="/projects" className="group">
-                  View Mobile Projects
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  Explore Portfolio
+                  <ArrowDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/contact">Get In Touch</Link>
+                <Link to="/contact">Contact Me</Link>
               </Button>
             </motion.div>
 
@@ -113,9 +112,9 @@ export default function Hero() {
             >
               {[
                 'Flutter', 
+                'Dart', 
                 'Firebase', 
-                'BLoC', 
-                'Provider'
+                'GetX'
               ].map((tech, index) => (
                 <motion.div
                   key={tech}
@@ -134,12 +133,12 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator with updated positioning */}
+      {/* Centered Scroll Indicator */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="fixed right-8 bottom-8 flex flex-col items-center z-50"
+        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-50"
       >
         <motion.span 
           animate={{ y: [0, 5, 0] }}
