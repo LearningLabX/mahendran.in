@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ChevronDown } from 'lucide-react'; 
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -174,11 +175,12 @@ export default function Hero() {
         >
           Scroll
         </motion.span>
-        <motion.div 
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
-          className="w-5 h-5 border-b-2 border-r-2 border-primary/50 transform rotate-45"
-        />
+        <motion.div
+  animate={{ y: [0, 10, 0] }}
+  transition={{ duration: 1.5, repeat: Infinity }}
+>
+  <ChevronDown className="w-8 h-8 text-primary/70" />
+</motion.div>
       </motion.div>
     </section>
   );
