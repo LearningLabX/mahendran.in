@@ -9,6 +9,7 @@ export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const [currentReel, setCurrentReel] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState<boolean[]>([false, false, false]);
   const reels = [
     "https://assets.mixkit.co/videos/preview/mixkit-app-development-concept-phone-and-programmer-8297-large.mp4",
     "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-person-writing-code-on-a-laptop-9748-large.mp4",
@@ -22,7 +23,7 @@ export default function Hero() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Auto-rotate reels
+    // Auto-rotate reels only after videos are loaded
     const interval = setInterval(() => {
       setCurrentReel(prev => (prev + 1) % reels.length);
     }, 8000);
@@ -32,6 +33,16 @@ export default function Hero() {
       clearInterval(interval);
     };
   }, []);
+
+  // Handle video loaded
+  const handleVideoLoaded = (index: number) => {
+    setVideoLoaded(prev => {
+      const updated = [...prev];
+      updated[index] = true;
+      return updated;
+    });
+    console.log(`Video ${index} loaded successfully`);
+  };
 
   // Parallax effect
   const parallaxStyle = {
@@ -45,34 +56,81 @@ export default function Hero() {
     >
       {/* Video background */}
       <div className="absolute inset-0 w-full h-full z-0">
-        <div className="absolute inset-0 bg-black/50 z-10"></div>
+        <div className="absolute inset-0 bg-black/60 z-10"></div>
         {reels.map((videoSrc, index) => (
-          <video 
+          <motion.div 
             key={videoSrc}
-            autoPlay 
-            muted 
-            loop
-            playsInline
-            className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
-              currentReel === index ? "opacity-100" : "opacity-0"
-            }`}
-            onLoadedData={() => console.log(`Video ${index} loaded`)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentReel === index ? 1 : 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 w-full h-full"
           >
-            <source src={videoSrc} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            <video 
+              autoPlay 
+              muted 
+              loop
+              playsInline
+              className="w-full h-full object-cover"
+              onLoadedData={() => handleVideoLoaded(index)}
+            >
+              <source src={videoSrc} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            {!videoLoaded[index] && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background">
+                <div className="w-12 h-12 border-4 border-t-primary border-primary/20 rounded-full animate-spin"></div>
+              </div>
+            )}
+          </motion.div>
         ))}
       </div>
       
-      {/* Background pattern */}
-      <div 
-        className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] z-10"
-        style={{ 
-          backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-          backgroundSize: '30px 30px',
-          ...parallaxStyle 
-        }}
-      />
+      {/* Background pattern with particles */}
+      <div className="absolute inset-0 z-10">
+        <div 
+          className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08]"
+          style={{ 
+            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
+            ...parallaxStyle 
+          }}
+        />
+        
+        {/* Animated particles */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-primary/30 backdrop-blur-md"
+            initial={{
+              x: Math.random() * 100 - 50 + "%",
+              y: Math.random() * 100 - 50 + "%",
+              scale: Math.random() * 0.6 + 0.2,
+              opacity: 0.2 + Math.random() * 0.3,
+            }}
+            animate={{
+              x: [
+                Math.random() * 100 - 50 + "%",
+                Math.random() * 100 - 50 + "%",
+                Math.random() * 100 - 50 + "%",
+              ],
+              y: [
+                Math.random() * 100 - 50 + "%",
+                Math.random() * 100 - 50 + "%",
+                Math.random() * 100 - 50 + "%",
+              ],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 20 + Math.random() * 30,
+              ease: "linear",
+            }}
+            style={{
+              width: `${Math.random() * 20 + 5}px`,
+              height: `${Math.random() * 20 + 5}px`,
+            }}
+          />
+        ))}
+      </div>
       
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
@@ -93,7 +151,7 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-white"
           >
-            Mobile App Developer Crafting <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">Digital Experiences</span>
+            Mahendran's <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">Digital Creations</span>
           </motion.h1>
 
           <motion.p 
@@ -160,15 +218,25 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator with improved animation */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 1.2 }}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
       >
-        <span className="text-sm text-white/70 mb-2">Scroll</span>
-        <span className="w-5 h-5 border-b-2 border-r-2 border-white/70 transform rotate-45"></span>
+        <motion.span 
+          className="text-sm text-white/70 mb-2"
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Scroll
+        </motion.span>
+        <motion.span 
+          className="w-5 h-5 border-b-2 border-r-2 border-white/70 transform rotate-45"
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+        ></motion.span>
       </motion.div>
     </section>
   );

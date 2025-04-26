@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -47,7 +48,7 @@ export default function Navbar() {
             to="/" 
             className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400"
           >
-            DevPortfolio
+            Mahendran
           </Link>
 
           {/* Desktop Navigation */}
@@ -86,13 +87,27 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {mobileMenuOpen && (
-        <nav className="md:hidden bg-background/95 backdrop-blur-lg border-t">
-          <div className="container mx-auto px-4 py-3 space-y-1">
-            {navLinks.map(link => (
+      {/* Mobile Navigation with improved animation */}
+      <motion.nav 
+        className="md:hidden bg-background/95 backdrop-blur-lg border-t overflow-hidden"
+        initial={{ height: 0 }}
+        animate={{ height: mobileMenuOpen ? 'auto' : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      >
+        <motion.div 
+          className="container mx-auto px-4 py-3 space-y-1"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mobileMenuOpen ? 1 : 0 }}
+          transition={{ duration: 0.2, delay: mobileMenuOpen ? 0.1 : 0 }}
+        >
+          {navLinks.map((link, index) => (
+            <motion.div
+              key={link.name}
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: mobileMenuOpen ? 0 : -20, opacity: mobileMenuOpen ? 1 : 0 }}
+              transition={{ delay: mobileMenuOpen ? 0.1 + index * 0.05 : 0 }}
+            >
               <Link
-                key={link.name}
                 to={link.path}
                 className={`block py-2.5 px-3 rounded-md transition-colors ${
                   pathname === link.path
@@ -102,10 +117,10 @@ export default function Navbar() {
               >
                 {link.name}
               </Link>
-            ))}
-          </div>
-        </nav>
-      )}
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.nav>
     </header>
   );
 }

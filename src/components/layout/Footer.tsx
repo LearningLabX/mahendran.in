@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
           <div>
             <Link to="/" className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
-              DevPortfolio
+              Mahendran
             </Link>
             <p className="text-sm text-muted-foreground mt-2">Building exceptional mobile experiences</p>
           </div>
@@ -41,7 +41,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-border/40 mt-8 pt-8 text-center md:text-start text-sm text-muted-foreground">
-          <p>&copy; {currentYear} DevPortfolio. All rights reserved.</p>
+          <p>&copy; {currentYear} Mahendran. All rights reserved.</p>
         </div>
       </div>
     </footer>

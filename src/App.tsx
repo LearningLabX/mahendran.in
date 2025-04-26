@@ -13,6 +13,7 @@ import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import Resume from "./pages/Resume";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
@@ -22,7 +23,7 @@ import Footer from "./components/layout/Footer";
 
 const queryClient = new QueryClient();
 
-// Loading Screen Component
+// Loading Screen Component with improved animation
 const LoadingScreen = () => (
   <motion.div 
     className="fixed inset-0 bg-background flex items-center justify-center z-50"
@@ -64,7 +65,7 @@ const LoadingScreen = () => (
         transition={{ delay: 0.5 }}
         className="text-2xl font-bold mt-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400"
       >
-        DevPortfolio
+        Mahendran's Portfolio
       </motion.h2>
     </div>
   </motion.div>
@@ -106,6 +107,7 @@ const App = () => {
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/resume" element={<Resume />} />
                       <Route path="/blog" element={<Blog />} />
+                      <Route path="/blog/:blogId" element={<BlogPost />} />
                       <Route path="/contact" element={<Contact />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
