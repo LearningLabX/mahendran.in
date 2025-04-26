@@ -1,10 +1,9 @@
-import { ArrowRight, Book } from "lucide-react";
+import { ArrowRight, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { motion } from "framer-motion";
-import { Code } from "@/components/ui/code";
 
 // Tech blog posts data
 const techPosts = [
