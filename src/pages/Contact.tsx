@@ -1,7 +1,6 @@
-
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import ContactForm from "@/components/contact/ContactForm";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import AnimatedSection from '@/components/ui/AnimatedSection';
+import ContactForm from '@/components/contact/ContactForm';
+import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -11,8 +10,9 @@ const Contact = () => {
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h1 className="text-4xl font-bold mb-4">Get In Touch</h1>
             <p className="text-muted-foreground">
-              Have a project in mind or want to chat about mobile app development? 
-              I'm always open to discussing new opportunities and ideas.
+              Have a project in mind or want to chat about mobile app
+              development? I'm always open to discussing new opportunities and
+              ideas.
             </p>
           </div>
         </AnimatedSection>
@@ -21,7 +21,7 @@ const Contact = () => {
           <AnimatedSection delay={100}>
             <div>
               <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <div className="bg-primary/10 p-3 rounded-lg">
@@ -29,56 +29,74 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-medium mb-1">Email</h3>
-                    <a href="mailto:hello@example.com" className="text-muted-foreground hover:text-primary transition-colors">
-                      hello@example.com
+                    <a
+                      href="mailto:g.mahendran2000@gmail.com"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      g.mahendran2000@gmail.com
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="bg-primary/10 p-3 rounded-lg">
                     <Linkedin className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium mb-1">LinkedIn</h3>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                      linkedin.com/in/devportfolio
+                    <a
+                      href="https://www.linkedin.com/in/mahendran-g-329464220/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      linkedin.com/in/mahendran-g-329464220
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="bg-primary/10 p-3 rounded-lg">
                     <Github className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium mb-1">GitHub</h3>
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                      github.com/devportfolio
+                    <a
+                      href="https://github.com/mahe2000"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      github.com/mahe2000
                     </a>
                   </div>
                 </div>
-                
-                <div className="flex items-start space-x-4">
+
+                {/* <div className="flex items-start space-x-4">
                   <div className="bg-primary/10 p-3 rounded-lg">
                     <Twitter className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium mb-1">Twitter</h3>
-                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <a
+                      href="https://twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
                       @devportfolio
                     </a>
                   </div>
-                </div>
+                </div> */}
               </div>
-              
-              <div className="mt-10">
+
+              {/* <div className="mt-10">
                 <h3 className="text-xl font-bold mb-3">Availability</h3>
                 <p className="text-muted-foreground">
-                  I'm currently available for freelance projects and consulting work.
-                  My usual response time is within 24-48 hours.
+                  I'm currently available for freelance projects and consulting
+                  work. My usual response time is within 24-48 hours.
                 </p>
-              </div>
+              </div> */}
             </div>
           </AnimatedSection>
 

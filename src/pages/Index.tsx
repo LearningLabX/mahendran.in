@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 import ProjectCard, { Project } from "@/components/projects/ProjectCard";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
 import ContactForm from "@/components/contact/ContactForm";
+import { motion } from "framer-motion";
 
 // Sample data for featured projects
 const featuredProjects: Project[] = [
@@ -72,13 +73,13 @@ const Index = () => {
       <Hero />
 
       {/* About Section */}
-      <About />
+      {/* <About /> */}
 
       {/* Tech Blogs Section - NEW SECTION */}
-      <TechBlogsSection />
+      {/* <TechBlogsSection /> */}
 
       {/* Featured Projects Section */}
-      <section className="py-20 bg-secondary/30">
+      {/* <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
@@ -109,14 +110,33 @@ const Index = () => {
             </div>
           </AnimatedSection>
         </div>
-      </section>
+      </section> */}
 
       {/* Resume Preview Section */}
-      <ResumeSection />
+      {/* <ResumeSection /> */}
 
       {/* Blog Section */}
-      <section className="py-20">
+      {/* <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+          <div className="text-center mb-16">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="flex items-center justify-center gap-2 mb-4"
+            >
+              <span className="h-px w-8 bg-primary/50"></span>
+              <span className="text-sm font-medium text-primary">Articles</span>
+              <span className="h-px w-8 bg-primary/50"></span>
+            </motion.div>
+            <h2 className="text-4xl font-bold mb-4">My Latest Articles</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+                Thoughts, tutorials, and insights on mobile development.
+            </p>
+          </div>
+        </AnimatedSection>
           <AnimatedSection>
             <div className="flex flex-col md:flex-row justify-between items-center mb-12">
               <div className="text-center md:text-left mb-6 md:mb-0">
@@ -142,10 +162,10 @@ const Index = () => {
             </div>
           </AnimatedSection>
         </div>
-      </section>
+      </section> */}
 
       {/* Contact Section */}
-      <section className="py-20 bg-secondary/30">
+      {/* <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
@@ -162,7 +182,7 @@ const Index = () => {
             </AnimatedSection>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

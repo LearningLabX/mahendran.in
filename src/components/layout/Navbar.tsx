@@ -1,25 +1,52 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Resume', path: '/resume' },
-  { name: 'Projects', path: '/projects' },
+  // { name: 'Resume', path: '/resume' },
   { name: 'Blog', path: '/blog' },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
 ];
+
+const words = ['Dream.', 'Develop.', 'Deploy.'];
+
+function CycleWords() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative h-6 overflow-hidden text-xs sm:text-sm text-muted-foreground">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[index]}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="absolute"
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { pathname } = useLocation();
 
-  // Handle scroll event
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -29,7 +56,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
@@ -44,18 +70,23 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link 
-            to="/" 
-            className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400"
-          >
-            Mahendran
-          </Link>
+          {/* Left side with Logo + CycleWords */}
+          <div className="flex flex-col leading-tight">
+            <Link
+              to="/"
+              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400"
+            >
+              Mahendran G
+            </Link>
+            {/* CycleWords Animated Text */}
+            <CycleWords />
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map(link => (
-              <Link 
-                key={link.name} 
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
                 to={link.path}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   pathname === link.path ? 'text-primary' : 'text-foreground/80'
@@ -64,37 +95,19 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
           </nav>
-
-          {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden space-x-2">
-            <ThemeToggle />
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-              aria-label="Toggle menu"
-              className="hover:bg-secondary focus:bg-secondary ml-1"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
-          </div>
         </div>
       </div>
 
-      {/* Mobile Navigation with improved animation */}
-      <motion.nav 
+      {/* Mobile Navigation */}
+      <motion.nav
         className="md:hidden bg-background/95 backdrop-blur-lg border-t overflow-hidden"
         initial={{ height: 0 }}
         animate={{ height: mobileMenuOpen ? 'auto' : 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
-        <motion.div 
+        <motion.div
           className="container mx-auto px-4 py-3 space-y-1"
           initial={{ opacity: 0 }}
           animate={{ opacity: mobileMenuOpen ? 1 : 0 }}
@@ -104,7 +117,10 @@ export default function Navbar() {
             <motion.div
               key={link.name}
               initial={{ x: -20, opacity: 0 }}
-              animate={{ x: mobileMenuOpen ? 0 : -20, opacity: mobileMenuOpen ? 1 : 0 }}
+              animate={{
+                x: mobileMenuOpen ? 0 : -20,
+                opacity: mobileMenuOpen ? 1 : 0,
+              }}
               transition={{ delay: mobileMenuOpen ? 0.1 + index * 0.05 : 0 }}
             >
               <Link
