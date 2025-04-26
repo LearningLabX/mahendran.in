@@ -1,4 +1,3 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
@@ -6,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-// Extended Blog Post content
 type FullBlogPost = {
   id: string;
   title: string;
@@ -17,9 +15,9 @@ type FullBlogPost = {
   category: string;
   readTime: string;
   author?: string;
+  hasCodeSnippets?: boolean;
 };
 
-// Sample blog posts database with full content
 const blogPostsData: Record<string, FullBlogPost> = {
   "native-vs-flutter": {
     id: "native-vs-flutter",
@@ -80,6 +78,54 @@ const blogPostsData: Record<string, FullBlogPost> = {
     category: "AR/VR",
     readTime: "16 min read",
     author: "Mahendran"
+  },
+  "flutter-bloc-guide": {
+    id: "flutter-bloc-guide",
+    title: "Flutter BLoC Pattern: A Comprehensive Guide with Examples",
+    excerpt: "Learn how to implement the BLoC pattern in Flutter for effective state management with practical code examples.",
+    content: [
+      "State management is crucial in Flutter applications, and the BLoC pattern has emerged as one of the most popular solutions. This guide will walk you through implementing BLoC in your Flutter projects.",
+      "## Understanding BLoC Pattern",
+      "The BLoC pattern separates business logic from UI components, making your code more maintainable and testable.",
+      "```dart\n// Example BLoC implementation\nimport 'package:flutter_bloc/flutter_bloc.dart';\n\nenum CounterEvent { increment, decrement }\n\nclass CounterBloc extends Bloc<CounterEvent, int> {\n  CounterBloc() : super(0) {\n    on<CounterEvent>((event, emit) {\n      switch (event) {\n        case CounterEvent.increment:\n          emit(state + 1);\n          break;\n        case CounterEvent.decrement:\n          emit(state - 1);\n          break;\n      }\n    });\n  }\n}\n```",
+      "## Using BLoC in Widget Tree",
+      "```dart\nclass CounterPage extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return BlocProvider(\n      create: (_) => CounterBloc(),\n      child: CounterView(),\n    );\n  }\n}\n\nclass CounterView extends StatelessWidget {\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      appBar: AppBar(title: Text('Counter')),\n      body: BlocBuilder<CounterBloc, int>(\n        builder: (context, count) {\n          return Center(\n            child: Text('$count'),\n          );\n        },\n      ),\n      floatingActionButton: Column(\n        crossAxisAlignment: CrossAxisAlignment.end,\n        mainAxisAlignment: MainAxisAlignment.end,\n        children: [\n          FloatingActionButton(\n            child: Icon(Icons.add),\n            onPressed: () => context\n                .read<CounterBloc>()\n                .add(CounterEvent.increment),\n          ),\n        ],\n      ),\n    );\n  }\n}\n```",
+      "## Best Practices",
+      "When implementing BLoC pattern, follow these best practices:",
+      "1. Keep your BLoCs focused and single-purpose",
+      "2. Use events for all state changes",
+      "3. Keep the state immutable",
+      "4. Write comprehensive tests for your BLoCs"
+    ],
+    coverImage: "https://images.unsplash.com/photo-1553481187-be93c21490a9?auto=format&fit=crop&w=870&q=80",
+    date: "Apr 20, 2025",
+    category: "Flutter",
+    readTime: "15 min read",
+    author: "Mahendran",
+    hasCodeSnippets: true
+  },
+  "flutter-animations": {
+    id: "flutter-animations",
+    title: "Creating Smooth Animations in Flutter: Tips & Tricks",
+    excerpt: "Master Flutter animations with practical examples and performance optimization techniques.",
+    content: [
+      "Flutter's animation system is powerful and flexible. Let's explore how to create smooth, performant animations that enhance your app's user experience.",
+      "## Basic Animations with AnimationController",
+      "```dart\nclass _AnimatedBoxState extends State<AnimatedBox>\n    with SingleTickerProviderStateMixin {\n  late AnimationController _controller;\n  late Animation<double> _animation;\n\n  @override\n  void initState() {\n    super.initState();\n    _controller = AnimationController(\n      duration: const Duration(seconds: 2),\n      vsync: this,\n    );\n    \n    _animation = Tween<double>(\n      begin: 0,\n      end: 1,\n    ).animate(CurvedAnimation(\n      parent: _controller,\n      curve: Curves.easeInOut,\n    ));\n    \n    _controller.repeat(reverse: true);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return AnimatedBuilder(\n      animation: _animation,\n      builder: (context, child) {\n        return Transform.scale(\n          scale: _animation.value,\n          child: Container(\n            width: 100,\n            height: 100,\n            color: Colors.blue,\n          ),\n        );\n      },\n    );\n  }\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n}\n```",
+      "## Hero Animations",
+      "```dart\nHero(\n  tag: 'imageHero',\n  child: Image.network(\n    'https://example.com/image.jpg',\n    width: 100,\n    height: 100,\n  ),\n)\n```",
+      "## Performance Tips",
+      "1. Use RepaintBoundary for complex animations",
+      "2. Keep animations smooth by running them on the GPU",
+      "3. Use const constructors where possible",
+      "4. Profile your animations using Flutter DevTools"
+    ],
+    coverImage: "https://images.unsplash.com/photo-1596443686812-2f45229eebc3?auto=format&fit=crop&w=870&q=80",
+    date: "Apr 18, 2025",
+    category: "Flutter",
+    readTime: "12 min read",
+    author: "Mahendran",
+    hasCodeSnippets: true
   }
 };
 
@@ -87,12 +133,10 @@ const BlogPost = () => {
   const { blogId } = useParams<{ blogId: string }>();
   const [isLoading, setIsLoading] = useState(true);
   
-  // Scroll to top when post changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [blogId]);
   
-  // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -148,7 +192,6 @@ const BlogPost = () => {
           </Button>
         </AnimatedSection>
 
-        {/* Hero Section */}
         <AnimatedSection>
           <div className="flex flex-col space-y-4 mb-12">
             <div className="flex items-center gap-2">
@@ -178,7 +221,6 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
-        {/* Featured Image */}
         <AnimatedSection delay={200}>
           <div className="relative w-full h-[40vh] md:h-[60vh] rounded-xl overflow-hidden mb-16">
             <img 
@@ -189,7 +231,6 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
-        {/* Blog Content */}
         <AnimatedSection delay={300}>
           <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
             {post.content.map((paragraph, index) => {
@@ -214,7 +255,6 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
-        {/* Related Posts Section */}
         <AnimatedSection delay={400}>
           <div className="mt-20 pt-12 border-t">
             <h3 className="text-2xl font-bold mb-8 text-center">Related Articles</h3>

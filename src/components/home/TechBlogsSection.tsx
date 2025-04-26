@@ -1,26 +1,28 @@
-
 import { ArrowRight, Book } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { motion } from "framer-motion";
+import { Code } from "@/components/ui/code";
 
 // Tech blog posts data
 const techPosts = [
   {
-    id: "native-vs-flutter",
-    title: "React Native vs Flutter: The Ultimate Comparison for 2025",
-    category: "Development",
-    image: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?auto=format&fit=crop&w=870&q=80",
-    gradient: "from-blue-500 to-purple-600"
+    id: "flutter-bloc-guide",
+    title: "Flutter BLoC Pattern: A Comprehensive Guide",
+    category: "Flutter",
+    image: "https://images.unsplash.com/photo-1553481187-be93c21490a9",
+    gradient: "from-blue-500 to-purple-600",
+    hasCodeSnippets: true
   },
   {
-    id: "ar-mobile-apps",
-    title: "Building AR Experiences in Mobile Apps: A Complete Guide",
-    category: "AR/VR",
-    image: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=870&q=80",
-    gradient: "from-green-500 to-emerald-700"
+    id: "flutter-animations",
+    title: "Creating Smooth Animations in Flutter",
+    category: "Flutter",
+    image: "https://images.unsplash.com/photo-1596443686812-2f45229eebc3",
+    gradient: "from-green-500 to-emerald-700",
+    hasCodeSnippets: true
   },
   {
     id: "mobile-design-trends",
@@ -79,10 +81,16 @@ export default function TechBlogsSection() {
                     />
                   </div>
                   <CardContent className="h-full flex flex-col justify-end p-6 relative z-20">
-                    <div className="mb-auto">
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm text-white mb-2">
+                    <div className="mb-auto space-y-2">
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm text-white">
                         {post.category}
                       </span>
+                      {post.hasCodeSnippets && (
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/20 backdrop-blur-sm text-white flex items-center gap-1 w-fit">
+                          <Code size={12} />
+                          Tutorial
+                        </span>
+                      )}
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
                       {post.title}

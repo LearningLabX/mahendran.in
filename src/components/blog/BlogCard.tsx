@@ -1,5 +1,5 @@
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export type BlogPost = {
@@ -10,6 +10,7 @@ export type BlogPost = {
   date: string;
   category: string;
   readTime: string;
+  hasCodeSnippets?: boolean;
 };
 
 type BlogCardProps = {
@@ -31,6 +32,12 @@ export default function BlogCard({ post }: BlogCardProps) {
         <span className="px-2 py-1 bg-secondary rounded-full font-medium">
           {post.category}
         </span>
+        {post.hasCodeSnippets && (
+          <span className="px-2 py-1 bg-primary/10 text-primary rounded-full font-medium flex items-center gap-1">
+            <Code size={12} />
+            Tutorial
+          </span>
+        )}
         <span className="text-muted-foreground">{post.date}</span>
         <span className="text-muted-foreground">&middot;</span>
         <span className="text-muted-foreground">{post.readTime}</span>
