@@ -1,11 +1,10 @@
-
 {
   "posts": [
     {
       "id": "flutter-bloc-guide",
-      "title": "Flutter BLoC Pattern: A Comprehensive Guide",
-      "excerpt": "Learn how to implement the BLoC pattern in Flutter for effective state management with practical code examples.",
-      "category": "Flutter",
+      "title": "android BLoC Pattern: A Comprehensive Guide",
+      "excerpt": "Learn how to implement the BLoC pattern in android for effective state management with practical code examples.",
+      "category": "Android",
       "image": "https://images.unsplash.com/photo-1553481187-be93c21490a9",
       "coverImage": "https://images.unsplash.com/photo-1553481187-be93c21490a9",
       "gradient": "from-blue-500 to-purple-600",
@@ -14,10 +13,8 @@
       "readTime": "15 min read",
       "author": "Mahendran",
       "content": [
-        "State management is crucial in Flutter applications, and the BLoC pattern has emerged as one of the most popular solutions. This guide will walk you through implementing BLoC in your Flutter projects.",
-        "## Understanding BLoC Pattern",
-        "The BLoC pattern separates business logic from UI components, making your code more maintainable and testable.",
-        "```dart\n// Example BLoC implementation\nimport 'package:flutter_bloc/flutter_bloc.dart';\n\nenum CounterEvent { increment, decrement }\n\nclass CounterBloc extends Bloc<CounterEvent, int> {\n  CounterBloc() : super(0) {\n    on<CounterEvent>((event, emit) {\n      switch (event) {\n        case CounterEvent.increment:\n          emit(state + 1);\n          break;\n        case CounterEvent.decrement:\n          emit(state - 1);\n          break;\n      }\n    });\n  }\n}\n```"
+        "State management is crucial in android applications, and the BLoC pattern has emerged as one of the most popular solutions. This guide will walk you through implementing BLoC in your android projects.",
+        "## Understanding BLoC Pattern"
       ]
     }
   ],

@@ -17,9 +17,9 @@ const BlogPost = () => {
   }, [blogId]);
 
   useEffect(() => {
-    const foundPost = blogData.posts.find(p => p.id === blogId) || null;
+    const foundPost = blogData.posts.find((p) => p.id === blogId) || null;
     setPost(foundPost);
-    
+
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 800);
