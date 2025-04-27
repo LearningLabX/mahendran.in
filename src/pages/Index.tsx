@@ -1,74 +1,66 @@
-
-import Hero from "@/components/home/Hero";
-import About from "@/components/home/About";
-import TechBlogsSection from "@/components/home/TechBlogsSection";
-import ResumeSection from "@/components/resume/ResumeSection";
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import ProjectCard from "@/components/projects/ProjectCard";
-import BlogCard from "@/components/blog/BlogCard";
-import ContactForm from "@/components/contact/ContactForm";
-import { motion } from "framer-motion";
-import { type BlogPost } from "@/hooks/useBlogPosts";
-import { type Project } from "@/components/projects/ProjectCard";
-import AnimatedTechIcons from "@/components/home/AnimatedTechIcons";
+import Hero from '@/components/home/Hero';
+import { type BlogPost } from '@/hooks/useBlogPosts';
+import { type Project } from '@/components/projects/ProjectCard';
 
 // Sample data for featured projects
 const featuredProjects: Project[] = [
   {
-    id: "health-tracker",
-    title: "Health Tracker App",
-    description: "A comprehensive health tracking application with personalized insights and analytics.",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    technologies: ["React Native", "Firebase", "HealthKit"],
-    demoUrl: "#",
-    githubUrl: "#",
-    featured: true
+    id: 'health-tracker',
+    title: 'Health Tracker App',
+    description:
+      'A comprehensive health tracking application with personalized insights and analytics.',
+    image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
+    technologies: ['React Native', 'Firebase', 'HealthKit'],
+    demoUrl: '#',
+    githubUrl: '#',
+    featured: true,
   },
   {
-    id: "fitness-coach",
-    title: "Fitness Coach",
-    description: "AI-powered personal trainer app with custom workout plans and progress tracking.",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
-    technologies: ["Flutter", "TensorFlow", "Firebase"],
-    demoUrl: "#",
-    featured: true
+    id: 'fitness-coach',
+    title: 'Fitness Coach',
+    description:
+      'AI-powered personal trainer app with custom workout plans and progress tracking.',
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
+    technologies: ['Flutter', 'TensorFlow', 'Firebase'],
+    demoUrl: '#',
+    featured: true,
   },
   {
-    id: "meal-planner",
-    title: "Meal Planner",
-    description: "Recipe and nutrition tracking app with shopping list integration and meal scheduling.",
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-    technologies: ["Swift", "Core Data", "REST API"],
-    githubUrl: "#",
-    featured: true
-  }
+    id: 'meal-planner',
+    title: 'Meal Planner',
+    description:
+      'Recipe and nutrition tracking app with shopping list integration and meal scheduling.',
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+    technologies: ['Swift', 'Core Data', 'REST API'],
+    githubUrl: '#',
+    featured: true,
+  },
 ];
 
 // Sample data for blog posts
 const featuredPosts: BlogPost[] = [
   {
-    id: "react-native-tips",
-    title: "10 Performance Tips for React Native Apps",
-    excerpt: "Optimize your React Native app with these proven techniques to improve speed, reduce bundle size, and create smoother animations.",
-    coverImage: "https://images.unsplash.com/photo-1531297484001-80022131f5a1",
-    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1", // Add image property
-    date: "Apr 15, 2023",
-    category: "React Native",
-    readTime: "8 min read"
+    id: 'react-native-tips',
+    title: '10 Performance Tips for React Native Apps',
+    excerpt:
+      'Optimize your React Native app with these proven techniques to improve speed, reduce bundle size, and create smoother animations.',
+    coverImage: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1',
+    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1', // Add image property
+    date: 'Apr 15, 2023',
+    category: 'React Native',
+    readTime: '8 min read',
   },
   {
-    id: "flutter-vs-rn",
-    title: "Flutter vs React Native in 2023",
-    excerpt: "An in-depth comparison of the two most popular cross-platform frameworks and which one you should choose for your next project.",
-    coverImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085", // Add image property
-    date: "Mar 22, 2023",
-    category: "Mobile Dev",
-    readTime: "12 min read"
-  }
+    id: 'flutter-vs-rn',
+    title: 'Flutter vs React Native in 2023',
+    excerpt:
+      'An in-depth comparison of the two most popular cross-platform frameworks and which one you should choose for your next project.',
+    coverImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085', // Add image property
+    date: 'Mar 22, 2023',
+    category: 'Mobile Dev',
+    readTime: '12 min read',
+  },
 ];
 
 const Index = () => {
@@ -78,7 +70,7 @@ const Index = () => {
       <Hero />
 
       {/* Animated Tech Icons - NEW SECTION */}
-      <AnimatedTechIcons />
+      {/* <AnimatedTechIcons /> */}
 
       {/* About Section */}
       {/* <About /> */}
