@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Apple, Racing } from "lucide-react";
+import { Apple, Rocket } from "lucide-react";
 
 const AnimatedTechIcons = () => {
   const iconVariants = {
@@ -49,7 +49,7 @@ const AnimatedTechIcons = () => {
             animate="race"
             className="flex flex-col items-center gap-2 group"
           >
-            <Racing className="w-12 h-12 text-green-500 transform rotate-12" />
+            <Rocket className="w-12 h-12 text-green-500 transform rotate-12" />
             <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
               Android
             </span>
