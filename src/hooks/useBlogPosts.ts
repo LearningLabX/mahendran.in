@@ -13,6 +13,8 @@ export interface BlogPost {
   date: string;
   readTime: string;
   content?: string[];
+  coverImage?: string;
+  author?: string;
 }
 
 export const useBlogPosts = (categoryFilter?: string | null) => {
@@ -24,12 +26,18 @@ export const useBlogPosts = (categoryFilter?: string | null) => {
     const allPosts = blogData.posts;
     const allCategories = blogData.categories;
 
+    // Map data to ensure coverImage is set from image property
+    const processedPosts = allPosts.map(post => ({
+      ...post,
+      coverImage: post.image // Ensure coverImage is available
+    }));
+
     setCategories(allCategories);
     
     if (categoryFilter) {
-      setPosts(allPosts.filter(post => post.category === categoryFilter));
+      setPosts(processedPosts.filter(post => post.category === categoryFilter));
     } else {
-      setPosts(allPosts);
+      setPosts(processedPosts);
     }
   }, [categoryFilter]);
 

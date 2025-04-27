@@ -1,28 +1,21 @@
 
 import { ArrowRight, Code } from "lucide-react";
 import { Link } from "react-router-dom";
-
-export type BlogPost = {
-  id: string;
-  title: string;
-  excerpt: string;
-  coverImage: string;
-  date: string;
-  category: string;
-  readTime: string;
-  hasCodeSnippets?: boolean;
-};
+import { BlogPost as BlogPostType } from "@/hooks/useBlogPosts";
 
 type BlogCardProps = {
-  post: BlogPost;
+  post: BlogPostType;
 };
 
 export default function BlogCard({ post }: BlogCardProps) {
+  // Use image as fallback if coverImage is not available
+  const imageUrl = post.coverImage || post.image;
+  
   return (
     <div className="group overflow-hidden flex flex-col">
       <Link to={`/blog/${post.id}`} className="overflow-hidden rounded-lg">
         <img
-          src={post.coverImage}
+          src={imageUrl}
           alt={post.title}
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
         />

@@ -7,10 +7,12 @@
       "excerpt": "Learn how to implement the BLoC pattern in Flutter for effective state management with practical code examples.",
       "category": "Flutter",
       "image": "https://images.unsplash.com/photo-1553481187-be93c21490a9",
+      "coverImage": "https://images.unsplash.com/photo-1553481187-be93c21490a9",
       "gradient": "from-blue-500 to-purple-600",
       "hasCodeSnippets": true,
       "date": "Apr 20, 2025",
       "readTime": "15 min read",
+      "author": "Mahendran",
       "content": [
         "State management is crucial in Flutter applications, and the BLoC pattern has emerged as one of the most popular solutions. This guide will walk you through implementing BLoC in your Flutter projects.",
         "## Understanding BLoC Pattern",
