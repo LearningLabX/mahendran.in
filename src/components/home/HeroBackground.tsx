@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Code, Smartphone, AppWindow, Tablet, Apple, Android, FileCode } from "lucide-react";
+import { Code, Smartphone, AppWindow, Tablet, Monitor, FileCode, Laptop } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TechElement = ({ icon: Icon, color, size = 24 }: { icon: any; color: string; size?: number }) => {
@@ -55,8 +55,8 @@ const HeroBackground = () => {
     { icon: Code, color: "text-blue-500", size: 28 },
     { icon: Smartphone, color: "text-green-500", size: 32 },
     { icon: AppWindow, color: "text-purple-500", size: 30 },
-    { icon: Android, color: "text-emerald-500", size: 28 },
-    { icon: Apple, color: "text-gray-500", size: 28 },
+    { icon: Laptop, color: "text-emerald-500", size: 28 },
+    { icon: Monitor, color: "text-gray-500", size: 28 },
     { icon: FileCode, color: "text-orange-500", size: 26 },
     { icon: Tablet, color: "text-pink-500", size: 34 },
     { icon: Code, color: "text-cyan-500", size: 24 },
