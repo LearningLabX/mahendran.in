@@ -8,12 +8,12 @@ export interface BlogPost {
   excerpt: string;
   category: string;
   image: string;
+  coverImage?: string;
   gradient?: string;
   hasCodeSnippets?: boolean;
   date: string;
   readTime: string;
   content?: string[];
-  coverImage?: string;
   author?: string;
 }
 
@@ -29,7 +29,8 @@ export const useBlogPosts = (categoryFilter?: string | null) => {
     // Map data to ensure coverImage is set from image property
     const processedPosts = allPosts.map(post => ({
       ...post,
-      coverImage: post.image // Ensure coverImage is available
+      coverImage: post.coverImage || post.image, // Ensure coverImage is available
+      image: post.image || post.coverImage // Ensure image is available too
     }));
 
     setCategories(allCategories);

@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Android, Apple, Fighter, Code, Rocket } from "lucide-react";
+import { Smartphone, Apple, Github, Code, Rocket } from "lucide-react";
 
 const AnimatedTechIcons = () => {
   const iconVariants = {
@@ -20,9 +20,9 @@ const AnimatedTechIcons = () => {
   };
 
   const icons = [
-    { Icon: Android, color: "text-green-500" },
+    { Icon: Smartphone, color: "text-green-500" },
     { Icon: Apple, color: "text-gray-700 dark:text-gray-300" },
-    { Icon: Fighter, color: "text-purple-500" },
+    { Icon: Github, color: "text-purple-500" },
     { Icon: Code, color: "text-blue-500" },
     { Icon: Rocket, color: "text-red-500" }
   ];

@@ -1,3 +1,4 @@
+
 import Hero from "@/components/home/Hero";
 import About from "@/components/home/About";
 import TechBlogsSection from "@/components/home/TechBlogsSection";
@@ -53,6 +54,7 @@ const featuredPosts: BlogPost[] = [
     title: "10 Performance Tips for React Native Apps",
     excerpt: "Optimize your React Native app with these proven techniques to improve speed, reduce bundle size, and create smoother animations.",
     coverImage: "https://images.unsplash.com/photo-1531297484001-80022131f5a1",
+    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1", // Add image property
     date: "Apr 15, 2023",
     category: "React Native",
     readTime: "8 min read"
@@ -62,6 +64,7 @@ const featuredPosts: BlogPost[] = [
     title: "Flutter vs React Native in 2023",
     excerpt: "An in-depth comparison of the two most popular cross-platform frameworks and which one you should choose for your next project.",
     coverImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085", // Add image property
     date: "Mar 22, 2023",
     category: "Mobile Dev",
     readTime: "12 min read"
