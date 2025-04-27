@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -67,7 +66,7 @@ export default function HeroContent() {
               className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 transition-opacity"
             >
               <Link to="/blog" className="group">
-                Explore Tech Blog
+                Explore Tech Blog.
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
               </Link>
             </Button>
