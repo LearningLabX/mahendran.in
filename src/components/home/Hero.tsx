@@ -11,6 +11,7 @@ import { useRef } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import HeroBackground from './HeroBackground';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,21 +56,8 @@ export default function Hero() {
       ref={containerRef}
       className="min-h-screen relative overflow-hidden flex items-center"
     >
-      {/* Simple gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background to-background/50">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,0,0,0))]" />
-      </div>
-
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0)`,
-          backgroundSize: '40px 40px',
-        }}
-      >
-        <motion.div style={{ y, opacity }} className="w-full h-full" />
-      </div>
+      {/* Add the animated background */}
+      <HeroBackground />
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
