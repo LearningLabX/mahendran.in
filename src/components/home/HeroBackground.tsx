@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Code, Robot, Laptop, Monitor, FileCode, Microchip, CircuitBoard, Bot } from "lucide-react";
+import { Code, Bot, Laptop, Monitor, FileCode, Microchip, CircuitBoard } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const TechElement = ({ icon: Icon, color, size = 24 }: { icon: any; color: string; size?: number }) => {
@@ -63,7 +63,7 @@ const TechElement = ({ icon: Icon, color, size = 24 }: { icon: any; color: strin
 
 const HeroBackground = () => {
   const techElements = [
-    { icon: Robot, color: "text-blue-500", size: 32 },
+    { icon: Bot, color: "text-blue-500", size: 32 },
     { icon: Bot, color: "text-green-500", size: 38 },
     { icon: Microchip, color: "text-purple-500", size: 34 },
     { icon: Laptop, color: "text-emerald-500", size: 30 },
@@ -71,7 +71,7 @@ const HeroBackground = () => {
     { icon: CircuitBoard, color: "text-orange-500", size: 28 },
     { icon: FileCode, color: "text-pink-500", size: 34 },
     { icon: Code, color: "text-cyan-500", size: 28 },
-    { icon: Robot, color: "text-indigo-500", size: 40 },
+    { icon: Bot, color: "text-indigo-500", size: 40 },
     { icon: Bot, color: "text-rose-500", size: 32 }
   ];
 
