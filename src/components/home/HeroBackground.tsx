@@ -45,7 +45,7 @@ const TechElement = ({ icon: Icon, color, size = 24 }: { icon: any; color: strin
         },
       }}
     >
-      <Icon className={`${color} opacity-20 hover:opacity-40 transition-opacity`} size={size} />
+      <Icon className={`${color} opacity-60 hover:opacity-80 transition-opacity`} size={size} />
     </motion.div>
   );
 };
@@ -63,7 +63,7 @@ const HeroBackground = () => {
   ];
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden z-0">
       {techElements.map((element, index) => (
         <TechElement 
           key={index} 
@@ -73,8 +73,8 @@ const HeroBackground = () => {
         />
       ))}
       
-      {/* Gradient overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+      {/* Gradient overlay with reduced opacity for better visibility of tech elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/80 to-background/90" />
     </div>
   );
 };
