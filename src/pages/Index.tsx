@@ -1,4 +1,3 @@
-
 import Hero from "@/components/home/Hero";
 import About from "@/components/home/About";
 import TechBlogsSection from "@/components/home/TechBlogsSection";
@@ -7,10 +6,13 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import ProjectCard, { Project } from "@/components/projects/ProjectCard";
-import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
+import ProjectCard from "@/components/projects/ProjectCard";
+import BlogCard from "@/components/blog/BlogCard";
 import ContactForm from "@/components/contact/ContactForm";
 import { motion } from "framer-motion";
+import { type BlogPost } from "@/hooks/useBlogPosts";
+import { type Project } from "@/components/projects/ProjectCard";
+import AnimatedTechIcons from "@/components/home/AnimatedTechIcons";
 
 // Sample data for featured projects
 const featuredProjects: Project[] = [
@@ -71,6 +73,9 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <Hero />
+
+      {/* Animated Tech Icons - NEW SECTION */}
+      <AnimatedTechIcons />
 
       {/* About Section */}
       {/* <About /> */}
