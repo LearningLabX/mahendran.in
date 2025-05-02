@@ -49,7 +49,7 @@ export default function HeroContent() {
             className="text-lg md:text-xl text-muted-foreground mb-8"
           >
             Transforming ideas into high-performance, user-centric mobile
-            applications using the latest in mobile development technologies.
+            applications with the latest mobile development technologies.
           </motion.p>
 
           {/* CTA Buttons */}
