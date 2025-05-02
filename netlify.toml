@@ -1,9 +1,10 @@
+
 [build]
   publish = "dist"  # Make sure this matches the output directory in Vite
   command = "npm run build"  # This will be triggered by Netlify during the deployment
 
 [[redirects]]
-  from = "/blog/*"
-  to = "/blog/:splat"
+  from = "/*"
+  to = "/index.html"
   status = 200
   force = true
