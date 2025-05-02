@@ -19,6 +19,14 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@radix-ui/react-toast', '@radix-ui/react-tooltip']
+        }
+      }
+    }
   },
   base: '/',  // Using root base path for all environments
 }));
