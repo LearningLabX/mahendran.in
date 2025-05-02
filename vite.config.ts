@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
@@ -26,22 +25,22 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-toast', '@radix-ui/react-tooltip']
+          ui: ['@radix-ui/react-toast', '@radix-ui/react-tooltip'],
         },
-        assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.');
-          const extType = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            return `assets/images/[name]-[hash][extname]`;
-          } else if (/woff|woff2|eot|ttf|otf/i.test(extType)) {
-            return `assets/fonts/[name]-[hash][extname]`;
-          } else if (/css/i.test(extType)) {
-            return `assets/css/[name]-[hash][extname]`;
-          }
-          return `assets/[name]-[hash][extname]`;
-        }
-      }
-    }
+        // You can uncomment this if you want better folder structure for assets:
+        // assetFileNames: (assetInfo) => {
+        //   const ext = assetInfo.name?.split('.').pop() || '';
+        //   if (['png', 'jpg', 'jpeg', 'svg', 'gif', 'ico'].includes(ext)) {
+        //     return 'assets/images/[name]-[hash][extname]';
+        //   } else if (['woff', 'woff2', 'eot', 'ttf', 'otf'].includes(ext)) {
+        //     return 'assets/fonts/[name]-[hash][extname]';
+        //   } else if (ext === 'css') {
+        //     return 'assets/css/[name]-[hash][extname]';
+        //   }
+        //   return 'assets/[name]-[hash][extname]';
+        // },
+      },
+    },
   },
-  base: '/',
+  base: '/', // ✅ Keep this if deploying at mahendran.info
 }));
