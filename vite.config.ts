@@ -19,5 +19,5 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'dist', // This is where your build will output, should match netlify.toml
   },
-  base: mode === 'production' ? '/blog/' : '/', // Adjust base path if needed in production
+  base: '/', //mode === 'production' ? '/blog/' : '/', // Adjust base path if needed in production
 }));
