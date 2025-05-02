@@ -1,6 +1,131 @@
 {
   "posts": [
-   
+    {
+      "id": "flutter-onesignal-push-notifications",
+      "title": "Integrating OneSignal Push Notifications in Flutter (Android & iOS)",
+      "excerpt": "Add push notifications to your Flutter app using OneSignal. Learn to customize icons, sounds, and handle events with code examples.",
+      "category": "Flutter",
+      "image": "https://miro.medium.com/v2/resize:fit:1200/1*qAiiSltzcDw9OT94e0vHeA.png",
+      "coverImage": "https://miro.medium.com/v2/resize:fit:1200/1*qAiiSltzcDw9OT94e0vHeA.png",
+      "gradient": "from-orange-400 to-pink-500",
+      "hasCodeSnippets": true,
+      "date": "May 2, 2025",
+      "readTime": "12 min read",
+      "author": "Mahendran G",
+
+      "content": [
+        "Push notifications help keep users engaged, informed, and active. In this guide, you'll learn how to integrate OneSignal into your Flutter app with custom notification icons and sounds for Android and iOS.",
+
+        "## Step 1: Add the OneSignal Plugin",
+        "Open your `pubspec.yaml` and add the OneSignal Flutter package:",
+        "```yaml\ndependencies:\n  onesignal_flutter: ^3.5.0\n```",
+        "Run:",
+        "```bash\nflutter pub get\n```",
+
+        "## Step 2: Initialize OneSignal",
+        "Create a service file `notification_service.dart`:",
+        "```dart\nimport 'package:onesignal_flutter/onesignal_flutter.dart';\n\nclass NotificationService {\n  static Future<void> init() async {\n    OneSignal.shared.setAppId('YOUR-ONESIGNAL-APP-ID');\n\n    // Optional permission prompt for iOS\n    OneSignal.shared.promptUserForPushNotificationPermission();\n\n    // Show notifications when app is in foreground\n    OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {\n      event.complete(event.notification);\n    });\n  }\n}\n```",
+        "Call `NotificationService.init();` in your `main()` before `runApp()`:",
+        "```dart\nvoid main() async {\n  WidgetsFlutterBinding.ensureInitialized();\n  await NotificationService.init();\n  runApp(MyApp());\n}\n```",
+
+        "## Android Setup",
+        "1. Create a custom icon `ic_stat_notify.png` and place it in:\n   `android/app/src/main/res/drawable/`",
+        "2. Add a custom sound (e.g., `notify_sound.mp3`) to:\n   `android/app/src/main/res/raw/`",
+        "3. Edit your `AndroidManifest.xml` inside `<application>`:",
+        "```xml\n<meta-data android:name=\"com.onesignal.NotificationIcon\"\n           android:resource=\"@drawable/ic_stat_notify\"/>\n<meta-data android:name=\"com.onesignal.Sound\"\n           android:resource=\"raw/notify_sound\"/>\n```",
+
+        "## iOS Setup",
+        "1. Drag your sound file (`notify_sound.wav`) into the `Runner` Xcode project (under Resources).",
+        "2. Enable:",
+        "   - Push Notifications",
+        "   - Background Modes > Remote notifications",
+        "3. Update `Info.plist` with:",
+        "```xml\n<key>UIBackgroundModes</key>\n<array>\n  <string>remote-notification</string>\n</array>\n```",
+
+        "## Sample Notification Payload",
+        "You can send a test push from Postman or backend:",
+        "```json\n{\n  \"app_id\": \"YOUR-ONESIGNAL-APP-ID\",\n  \"include_player_ids\": [\"PLAYER_ID\"],\n  \"headings\": {\"en\": \"Update Available\"},\n  \"contents\": {\"en\": \"Check out the latest improvements!\"},\n  \"android_sound\": \"notify_sound\",\n  \"ios_sound\": \"notify_sound.wav\"\n}\n```",
+
+        "## Images & UI Previews",
+        "### OneSignal Dashboard",
+        "![OneSignal Dashboard](https://onesignal.com/assets/images/landing-page/notification-dashboard.png)",
+        "### Android Notification Preview",
+        "![Android Notification](https://developer.android.com/images/ui/notifications/notification-icon.png)",
+
+        "## Key Statistics About Notifications",
+        "- 70% of users allow push notifications",
+        "- Custom sounds can increase open rates by 3x",
+        "- Most users check a push within 1 minute",
+
+        "## Pro Tips",
+        "- Use `OneSignal.shared.getDeviceState()` to get player ID and manage subscriptions",
+        "- Bundle this logic into a `NotificationService` and reuse across apps",
+        "- For testing, simulate foreground/background/terminated states during QA",
+
+        "## Conclusion",
+        "By integrating OneSignal into your Flutter app, you empower your app to re-engage users with personalized, timely notifications — complete with your own sound and branding. Set it up once, reuse it everywhere!"
+      ]
+    },
+    {
+      "id": "flutter-firebase-authentication-guide",
+      "title": "Firebase Authentication in Flutter: Full Guide with Email & Google Sign-In",
+      "excerpt": "Learn how to add user authentication in Flutter apps using Firebase. Covers email/password and Google login with complete setup and code.",
+      "category": "Flutter",
+      "image": "https://firebase.google.com/images/social.png",
+      "coverImage": "https://firebase.google.com/images/social.png",
+      "gradient": "from-yellow-400 to-red-500",
+      "hasCodeSnippets": true,
+      "date": "April 20, 2025",
+      "readTime": "15 min read",
+      "author": "Mahendran G",
+      "content": [
+        "Firebase Authentication is one of the easiest ways to add secure login and user management to your Flutter app. In this guide, we'll implement both email/password login and Google Sign-In using the official `firebase_auth` and `google_sign_in` packages.",
+
+        "## Prerequisites",
+        "- Flutter 3.0+",
+        "- A Firebase project created at [console.firebase.google.com](https://console.firebase.google.com)",
+        "- FlutterFire CLI installed: `dart pub global activate flutterfire_cli`",
+
+        "## Step 1: Create Firebase Project and Register App",
+        "1. Go to Firebase Console",
+        "2. Register Android and iOS apps",
+        "3. Add `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)",
+
+        "## Step 2: Initialize Firebase",
+        "Add dependencies in `pubspec.yaml`:",
+        "```yaml\ndependencies:\n  firebase_core: ^2.24.2\n  firebase_auth: ^4.19.2\n  google_sign_in: ^6.2.1\n```",
+
+        "Run:",
+        "```bash\nflutter pub get\n```",
+
+        "Initialize Firebase in `main.dart`:",
+        "```dart\nvoid main() async {\n  WidgetsFlutterBinding.ensureInitialized();\n  await Firebase.initializeApp();\n  runApp(MyApp());\n}\n```",
+
+        "## Step 3: Email & Password Authentication",
+        "Sign Up:",
+        "```dart\nFuture<UserCredential> signUp(String email, String password) async {\n  return await FirebaseAuth.instance.createUserWithEmailAndPassword(\n    email: email,\n    password: password,\n  );\n}\n```",
+        "Sign In:",
+        "```dart\nFuture<UserCredential> signIn(String email, String password) async {\n  return await FirebaseAuth.instance.signInWithEmailAndPassword(\n    email: email,\n    password: password,\n  );\n}\n```",
+        "Sign Out:",
+        "```dart\nFuture<void> signOut() async {\n  await FirebaseAuth.instance.signOut();\n}\n```",
+
+        "## Step 4: Google Sign-In Integration",
+        "Firebase Console: Enable Google Sign-In under Authentication > Sign-in method",
+        "Code:",
+        "```dart\nFuture<UserCredential> signInWithGoogle() async {\n  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();\n  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;\n\n  final credential = GoogleAuthProvider.credential(\n    accessToken: googleAuth?.accessToken,\n    idToken: googleAuth?.idToken,\n  );\n\n  return await FirebaseAuth.instance.signInWithCredential(credential);\n}\n```",
+
+        "## Step 5: Minimal UI",
+        "```dart\nclass LoginScreen extends StatelessWidget {\n  final emailController = TextEditingController();\n  final passwordController = TextEditingController();\n\n  @override\n  Widget build(BuildContext context) {\n    return Scaffold(\n      body: Padding(\n        padding: EdgeInsets.all(20),\n        child: Column(\n          children: [\n            TextField(controller: emailController, decoration: InputDecoration(labelText: 'Email')),\n            TextField(controller: passwordController, decoration: InputDecoration(labelText: 'Password'), obscureText: true),\n            ElevatedButton(\n              onPressed: () => signIn(emailController.text, passwordController.text),\n              child: Text('Login'),\n            ),\n            ElevatedButton.icon(\n              onPressed: () => signInWithGoogle(),\n              icon: Icon(Icons.login),\n              label: Text(\"Login with Google\"),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n```",
+
+        "## Extra Tips",
+        "- Use `FirebaseAuth.instance.authStateChanges()` to track login state",
+        "- Handle `FirebaseAuthException` to catch errors like wrong password or user not found",
+        "- Use `FirebaseAuth.instance.currentUser` to get the current user",
+
+        "## Conclusion",
+        "With Firebase Authentication, you can add secure login features to your Flutter app quickly. This approach scales well and supports advanced auth providers and role-based access if needed later."
+      ]
+    }
   ],
   "categories": [
     "Flutter",

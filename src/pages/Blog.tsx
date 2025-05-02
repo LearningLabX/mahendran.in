@@ -4,7 +4,18 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
-import { Book, Terminal, Code, Settings, Store, ShoppingBag, Smartphone, Apple, Grid, Shuffle } from 'lucide-react';
+import {
+  Book,
+  Terminal,
+  Code,
+  Settings,
+  Store,
+  ShoppingBag,
+  Smartphone,
+  Apple,
+  Grid,
+  Shuffle,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Tech categories with icons
@@ -22,7 +33,7 @@ const techCategories = [
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
+
   const { posts: filteredPosts } = useBlogPosts(selectedCategory);
 
   return (
@@ -41,7 +52,7 @@ const Blog = () => {
             <h1 className="text-5xl font-bold mb-6">Tech Blog</h1>
             <p className="text-muted-foreground">
               In-depth articles, tutorials, and insights on mobile app
-              development, UX design, and emerging technologies.
+              development and web technologies.
             </p>
           </div>
         </AnimatedSection>

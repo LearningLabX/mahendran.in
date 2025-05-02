@@ -17,7 +17,7 @@ export default function HeroContent() {
           className="text-center md:text-left md:flex-1"
         >
           {/* Dev badge */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
@@ -25,7 +25,7 @@ export default function HeroContent() {
           >
             <span className="inline-block w-2 h-2 rounded-full bg-primary mr-2"></span>
             <span className="text-primary/90">Mobile App Developer</span>
-          </motion.div>
+          </motion.div> */}
 
           {/* Main title */}
           <motion.h1
@@ -34,11 +34,11 @@ export default function HeroContent() {
             transition={{ delay: 0.3 }}
             className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
           >
-            Crafting{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
+            Mahendran G{' '}
+            {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
               Exceptional
             </span>{' '}
-            Mobile Experiences
+            Mobile Experiences */}
           </motion.h1>
 
           {/* Description */}
@@ -49,8 +49,7 @@ export default function HeroContent() {
             className="text-lg md:text-xl text-muted-foreground mb-8"
           >
             Transforming ideas into high-performance, user-centric mobile
-            applications using Flutter and cutting-edge mobile development
-            practices.
+            applications using the latest in mobile development technologies.
           </motion.p>
 
           {/* CTA Buttons */}
