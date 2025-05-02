@@ -17,30 +17,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: mode === 'development',
-    minify: mode === 'production',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@radix-ui/react-toast', '@radix-ui/react-tooltip'],
-        },
-        // You can uncomment this if you want better folder structure for assets:
-        // assetFileNames: (assetInfo) => {
-        //   const ext = assetInfo.name?.split('.').pop() || '';
-        //   if (['png', 'jpg', 'jpeg', 'svg', 'gif', 'ico'].includes(ext)) {
-        //     return 'assets/images/[name]-[hash][extname]';
-        //   } else if (['woff', 'woff2', 'eot', 'ttf', 'otf'].includes(ext)) {
-        //     return 'assets/fonts/[name]-[hash][extname]';
-        //   } else if (ext === 'css') {
-        //     return 'assets/css/[name]-[hash][extname]';
-        //   }
-        //   return 'assets/[name]-[hash][extname]';
-        // },
-      },
-    },
+    outDir: 'dist', // This is where your build will output, should match netlify.toml
   },
-  base: '/', // ✅ Keep this if deploying at mahendran.info
+  base: mode === 'production' ? '/blog/' : '/', // Adjust base path if needed in production
 }));
