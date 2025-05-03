@@ -2,10 +2,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Bot, X, Send, MessageSquare, Sparkles } from 'lucide-react';
+import { Bot, X, Send, MessageSquare, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/analytics';
-import { Badge } from '@/components/ui/badge';
+import { saveData, pushData } from '@/lib/realtimeDb';
 
 interface Message {
   id: string;
@@ -94,7 +94,7 @@ export default function ChatBot() {
       setMessages([
         {
           id: '1',
-          text: "Hi there! I'm the FREE mobile dev assistant. Ask me about Flutter, React Native, app monetization, or anything mobile development related!",
+          text: "Hi there! I'm Mahendran's mobile dev assistant. Ask me about Flutter, React Native, app monetization, or anything mobile development related!",
           isBot: true,
           timestamp: new Date(),
         },
@@ -125,8 +125,35 @@ export default function ChatBot() {
     return fallbackResponses[fallbackIndex];
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
+    
+    const timestamp = new Date();
+    const messageId = Date.now().toString();
+    
+    // Add user message
+    const newUserMessage = {
+      id: messageId,
+      text: inputValue,
+      isBot: false,
+      timestamp,
+    };
+    
+    setMessages(prev => [...prev, newUserMessage]);
+    setInputValue('');
+    
+    // Log user message to Firebase
+    try {
+      await pushData('chatLogs/messages', {
+        messageId,
+        text: inputValue,
+        isUser: true,
+        timestamp: timestamp.toISOString(),
+        sessionId: getOrCreateSessionId()
+      });
+    } catch (error) {
+      console.error('Error logging user message:', error);
+    }
     
     // Track the user message event
     trackEvent('chat_message_sent', {
@@ -134,39 +161,73 @@ export default function ChatBot() {
       is_question: inputValue.includes('?'),
     });
     
-    // Add user message
-    const newUserMessage = {
-      id: Date.now().toString(),
-      text: inputValue,
-      isBot: false,
-      timestamp: new Date(),
-    };
-    
-    setMessages(prev => [...prev, newUserMessage]);
-    setInputValue('');
-    
-    // Simulate bot typing
+    // Simulate bot typing - show typing indicator
     setIsTyping(true);
     
-    // Generate bot response after a delay
-    setTimeout(() => {
+    // Generate bot response with a small randomized delay to feel more natural
+    const typingDelay = 500 + Math.floor(Math.random() * 1000); // 0.5-1.5 seconds
+    
+    setTimeout(async () => {
       const botResponse = getBotResponse(inputValue);
+      const botTimestamp = new Date();
+      const botMessageId = (Date.now() + 1).toString();
+      
       const newBotMessage = {
-        id: (Date.now() + 1).toString(),
+        id: botMessageId,
         text: botResponse,
         isBot: true,
-        timestamp: new Date(),
+        timestamp: botTimestamp,
       };
       
       setMessages(prev => [...prev, newBotMessage]);
       setIsTyping(false);
+      
+      // Log bot response to Firebase
+      try {
+        await pushData('chatLogs/messages', {
+          messageId: botMessageId,
+          text: botResponse,
+          isUser: false,
+          timestamp: botTimestamp.toISOString(),
+          userMessageId: messageId,
+          sessionId: getOrCreateSessionId()
+        });
+        
+        // Log complete conversation
+        await pushData('chatLogs/conversations', {
+          userMessage: inputValue,
+          botResponse: botResponse,
+          timestamp: botTimestamp.toISOString(),
+          sessionId: getOrCreateSessionId()
+        });
+      } catch (error) {
+        console.error('Error logging bot response:', error);
+      }
       
       // Track bot response event
       trackEvent('chatbot_response', {
         user_message_length: inputValue.length,
         response_length: botResponse.length,
       });
-    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+    }, typingDelay);
+  };
+
+  // Generate or retrieve a session ID for this user
+  const getOrCreateSessionId = () => {
+    let sessionId = localStorage.getItem('chat_session_id');
+    if (!sessionId) {
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('chat_session_id', sessionId);
+      
+      // Log new session
+      saveData(`chatLogs/sessions/${sessionId}`, {
+        startTime: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        referrer: document.referrer || 'direct',
+        platform: navigator.platform
+      });
+    }
+    return sessionId;
   };
 
   const handleInputKeyPress = (e: React.KeyboardEvent) => {
@@ -178,27 +239,25 @@ export default function ChatBot() {
   const toggleChat = () => {
     setIsOpen(prev => !prev);
     trackEvent('chat_toggle', { action: isOpen ? 'close' : 'open' });
+    
+    // Log chat open/close actions
+    saveData('chatLogs/actions', {
+      action: isOpen ? 'close' : 'open',
+      timestamp: new Date().toISOString(),
+      sessionId: getOrCreateSessionId()
+    });
   };
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
-      {/* Chat toggle button with FREE badge */}
-      <div className="relative">
-        <Button 
-          onClick={toggleChat}
-          size="icon"
-          className={`rounded-full h-14 w-14 shadow-lg ${isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
-        >
-          {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
-        </Button>
-        
-        {/* FREE badge */}
-        <Badge 
-          className="absolute -top-2 -right-2 bg-green-500 hover:bg-green-500 text-white animate-pulse"
-        >
-          FREE
-        </Badge>
-      </div>
+      {/* Chat toggle button */}
+      <Button 
+        onClick={toggleChat}
+        size="icon"
+        className={`rounded-full h-14 w-14 shadow-lg ${isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
+      >
+        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+      </Button>
 
       {/* Chat window */}
       <AnimatePresence>
@@ -213,12 +272,12 @@ export default function ChatBot() {
             <div className="p-3 border-b bg-primary text-primary-foreground flex items-center justify-between">
               <div className="flex items-center">
                 <Bot size={20} className="mr-2" />
-                <span className="font-medium">Free Tech Assistant</span>
-                <Sparkles size={16} className="ml-2 text-yellow-300" />
+                <span className="font-medium">Tech Assistant</span>
               </div>
-              <Badge variant="outline" className="bg-green-500/20 text-green-500 border-green-500">
-                No Cost
-              </Badge>
+              <div className="flex items-center text-xs">
+                <Clock size={14} className="mr-1" />
+                <span>Real-time</span>
+              </div>
             </div>
             
             {/* Chat messages */}
@@ -237,7 +296,7 @@ export default function ChatBot() {
                   >
                     <p className="text-sm">{message.text}</p>
                     <span className="text-xs opacity-70 mt-1 block">
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </span>
                   </div>
                 </div>
@@ -259,7 +318,7 @@ export default function ChatBot() {
             {/* Chat input */}
             <div className="p-3 border-t bg-muted/30 flex items-center gap-2">
               <Input
-                placeholder="Ask anything for free..."
+                placeholder="Ask anything about mobile development..."
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 onKeyPress={handleInputKeyPress}
