@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -9,6 +10,9 @@ const navLinks = [
   { name: 'Home', path: '/' },
   // { name: 'Resume', path: '/resume' },
   { name: 'My Blogs', path: '/blog' },
+  { name: 'Games', path: '/games' },
+  { name: 'Tools', path: '/tools' },
+  { name: 'Templates', path: '/templates' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -81,6 +85,17 @@ export default function Navbar() {
             {/* CycleWords Animated Text */}
             <CycleWords />
           </div>
+
+          {/* Mobile menu button */}
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+
+            className="md:hidden"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </Button>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">

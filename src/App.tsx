@@ -19,6 +19,8 @@ import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import Games from './pages/Games';
+import Tools from './pages/Tools';
+import Templates from './pages/Templates';
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
@@ -98,6 +100,8 @@ const App = () => {
                   <Route path="/blog/:blogId" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/games" element={<Games />} />
+                  <Route path="/tools" element={<Tools />} />
+                  <Route path="/templates" element={<Templates />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
