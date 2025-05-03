@@ -1,3 +1,4 @@
+
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -21,6 +22,7 @@ import NotFound from './pages/NotFound';
 // Layout Components
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import ChatBot from './components/chat/ChatBot';
 
 const queryClient = new QueryClient();
 
@@ -97,7 +99,8 @@ const App = () => {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
-              {/* <Footer /> */}
+              <Footer />
+              <ChatBot />
             </BrowserRouter>
           </AnimatePresence>
         </TooltipProvider>
