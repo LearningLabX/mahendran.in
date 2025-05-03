@@ -1,3 +1,4 @@
+
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
@@ -6,15 +7,30 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import blogData from '@/data/blogPosts.json';
 import { BlogPost as BlogPostType } from '@/hooks/useBlogPosts';
+import { trackBlogView, trackEvent } from '@/lib/analytics';
+import { useGoogleAdsense } from '@/hooks/useGoogleAdsense';
 
 const BlogPost = () => {
   const { blogId } = useParams<{ blogId: string }>();
   const [isLoading, setIsLoading] = useState(true);
   const [post, setPost] = useState<BlogPostType | null>(null);
+  useGoogleAdsense(); // Hook to reinitialize ads when component mounts
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [blogId]);
+    
+    if (blogId) {
+      // Track blog post view for analytics
+      trackBlogView(blogId, post?.title || 'Unknown Post');
+      
+      // Track additional engagement metrics
+      trackEvent('blog_post_engagement', {
+        blog_id: blogId,
+        source: document.referrer || 'direct',
+        screen_size: `${window.innerWidth}x${window.innerHeight}`
+      });
+    }
+  }, [blogId, post?.title]);
 
   useEffect(() => {
     const foundPost = blogData.posts.find((p) => p.id === blogId) || null;
@@ -26,6 +42,25 @@ const BlogPost = () => {
 
     return () => clearTimeout(timer);
   }, [blogId]);
+
+  // Insert AdSense ad manually
+  const renderInContentAd = () => {
+    return (
+      <div className="my-8 text-center ad-container">
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block', textAlign: 'center' }}
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5354730220539777"
+          data-ad-slot="3479208831"
+        ></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    );
+  };
 
   if (!post) {
     return (
@@ -117,9 +152,39 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
+        {/* First ad after title and before content */}
+        {renderInContentAd()}
+
         <AnimatedSection delay={300}>
           <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
             {post.content.map((paragraph, index) => {
+              // Insert ad after the 3rd paragraph or heading
+              if (index === 3) {
+                return (
+                  <div key={index}>
+                    {paragraph.startsWith('## ') ? (
+                      <h2 className="text-2xl font-bold mt-10 mb-4">
+                        {paragraph.replace('## ', '')}
+                      </h2>
+                    ) : paragraph.startsWith('```') ? (
+                      <div className="my-6 overflow-auto rounded-lg bg-secondary/50 p-4">
+                        <pre>
+                          <code>
+                            {paragraph
+                              .split('\n')
+                              .slice(1, -1)
+                              .join('\n')}
+                          </code>
+                        </pre>
+                      </div>
+                    ) : (
+                      <p className="mb-6 leading-relaxed">{paragraph}</p>
+                    )}
+                    {renderInContentAd()}
+                  </div>
+                );
+              }
+
               if (paragraph.startsWith('## ')) {
                 return (
                   <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
@@ -127,7 +192,6 @@ const BlogPost = () => {
                   </h2>
                 );
               } else if (paragraph.startsWith('```')) {
-                const language = paragraph.split('\n')[0].replace('```', '');
                 const code = paragraph.split('\n').slice(1, -1).join('\n');
                 return (
                   <div
@@ -150,6 +214,9 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
+        {/* Ad before related articles */}
+        {renderInContentAd()}
+
         <AnimatedSection delay={400}>
           <div className="mt-20 pt-12 border-t">
             <h3 className="text-2xl font-bold mb-8 text-center">
@@ -164,6 +231,10 @@ const BlogPost = () => {
                     key={relatedPost.id}
                     to={`/blog/${relatedPost.id}`}
                     className="group"
+                    onClick={() => trackEvent('related_post_click', {
+                      from_post_id: post.id,
+                      to_post_id: relatedPost.id
+                    })}
                   >
                     <div className="flex gap-4">
                       <div className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden">
