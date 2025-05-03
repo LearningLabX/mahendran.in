@@ -4,8 +4,6 @@ import { Helmet } from 'react-helmet';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
 
 // Tool components
 import RegexTester from '@/components/tools/RegexTester';
@@ -16,6 +14,9 @@ import DateConverter from '@/components/tools/DateConverter';
 import UuidGenerator from '@/components/tools/UuidGenerator';
 import ApiTester from '@/components/tools/ApiTester';
 import BoilerplateGenerator from '@/components/tools/BoilerplateGenerator';
+import MarkdownConverter from '@/components/tools/MarkdownConverter';
+import SqlHelper from '@/components/tools/SqlHelper';
+import TechToolFinder from '@/components/tools/TechToolFinder';
 
 const Tools = () => {
   const [activeTab, setActiveTab] = useState('regex');
@@ -32,6 +33,18 @@ const Tools = () => {
       name: 'JSON Formatter',
       description: 'Format, validate and explore JSON data',
       component: JsonFormatter
+    },
+    {
+      id: 'markdown',
+      name: 'Markdown to HTML',
+      description: 'Convert Markdown to HTML with live preview',
+      component: MarkdownConverter
+    },
+    {
+      id: 'sql',
+      name: 'SQL Helper',
+      description: 'UUID/Binary conversion and SQL formatting tools',
+      component: SqlHelper
     },
     {
       id: 'base64',
@@ -70,27 +83,9 @@ const Tools = () => {
       component: BoilerplateGenerator
     }
   ];
-  
-  const externalResources = [
-    {
-      name: 'DartPad',
-      description: 'Write, analyze, and execute Dart code online',
-      url: 'https://dartpad.dev/'
-    },
-    {
-      name: 'Flutter Widget Catalog',
-      description: 'Official catalog of Flutter widgets',
-      url: 'https://flutter.dev/docs/development/ui/widgets'
-    },
-    {
-      name: 'DevTools',
-      description: 'Suite of performance and debugging tools for Flutter',
-      url: 'https://flutter.dev/docs/development/tools/devtools/overview'
-    }
-  ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className="min-h-screen pt-24 pb-16 bg-gradient-to-b from-background to-background/95">
       <Helmet>
         <title>Developer Tools | Mahendran</title>
         <meta
@@ -116,13 +111,13 @@ const Tools = () => {
 
         <AnimatedSection delay={100}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="flex space-x-1 rounded-lg bg-secondary/80 p-1 overflow-x-auto max-w-full sm:max-w-3xl">
+            <div className="mb-8">
+              <TabsList className="inline-flex p-1 rounded-lg bg-secondary/80 overflow-x-auto max-w-full flex-wrap justify-center">
                 {tools.map((tool) => (
                   <TabsTrigger
                     key={tool.id}
                     value={tool.id}
-                    className="whitespace-nowrap"
+                    className="px-4 py-2 whitespace-nowrap"
                   >
                     {tool.name}
                   </TabsTrigger>
@@ -132,7 +127,7 @@ const Tools = () => {
             
             {tools.map((tool) => (
               <TabsContent key={tool.id} value={tool.id} className="mt-2 mb-10">
-                <Card>
+                <Card className="border shadow-sm">
                   <CardHeader>
                     <CardTitle>{tool.name}</CardTitle>
                     <CardDescription>{tool.description}</CardDescription>
@@ -147,26 +142,7 @@ const Tools = () => {
         </AnimatedSection>
         
         <AnimatedSection delay={200}>
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold mb-6 text-center">External Resources</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {externalResources.map((resource, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow duration-200">
-                  <CardHeader>
-                    <CardTitle>{resource.name}</CardTitle>
-                    <CardDescription>{resource.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" asChild className="w-full">
-                      <a href={resource.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                        Visit Resource <ExternalLink className="ml-2 h-4 w-4" />
-                      </a>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+          <TechToolFinder />
         </AnimatedSection>
       </div>
     </div>
