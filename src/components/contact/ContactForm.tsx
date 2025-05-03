@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { trackFormSubmission } from "@/lib/analytics";
+import { pushData } from "@/lib/realtimeDb";
 
 type FormData = {
   name: string;
@@ -28,12 +30,20 @@ export default function ContactForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Save contact form submission to Firebase Realtime Database
+      const contactId = await pushData('contact_submissions', {
+        ...formData,
+        timestamp: new Date().toISOString(),
+      });
+      
+      // Track form submission event
+      trackFormSubmission('contact_form');
+      
       toast({
         title: "Message sent!",
         description: "Thank you for your message. I'll respond soon.",
@@ -44,9 +54,16 @@ export default function ContactForm() {
         email: "",
         message: "",
       });
-      
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
