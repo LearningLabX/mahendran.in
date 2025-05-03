@@ -21,6 +21,7 @@ import NotFound from './pages/NotFound';
 // Layout Components
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import ChatBot from './components/chat/ChatBot';
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,8 @@ const App = () => {
                 </Routes>
               </main>
               {/* <Footer /> */}
+              {/* Integrate ChatBot component */}
+              <ChatBot />
             </BrowserRouter>
           </AnimatePresence>
         </TooltipProvider>
