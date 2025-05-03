@@ -100,6 +100,7 @@ const App = () => {
                 </Routes>
               </main>
               <Footer />
+              {/* Ensure ChatBot is displayed on all pages */}
               <ChatBot />
             </BrowserRouter>
           </AnimatePresence>

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Bot, X, Send, MessageSquare, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/analytics';
+import { Badge } from '@/components/ui/badge';
 
 interface Message {
   id: string;
@@ -93,7 +94,7 @@ export default function ChatBot() {
       setMessages([
         {
           id: '1',
-          text: "Hi there! I'm the mobile dev assistant. Ask me about Flutter, React Native, app monetization, or anything mobile development related!",
+          text: "Hi there! I'm the FREE mobile dev assistant. Ask me about Flutter, React Native, app monetization, or anything mobile development related!",
           isBot: true,
           timestamp: new Date(),
         },
@@ -181,14 +182,23 @@ export default function ChatBot() {
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
-      {/* Chat toggle button */}
-      <Button 
-        onClick={toggleChat}
-        size="icon"
-        className={`rounded-full h-14 w-14 shadow-lg ${isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
-      >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
-      </Button>
+      {/* Chat toggle button with FREE badge */}
+      <div className="relative">
+        <Button 
+          onClick={toggleChat}
+          size="icon"
+          className={`rounded-full h-14 w-14 shadow-lg ${isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-primary hover:bg-primary/90'}`}
+        >
+          {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        </Button>
+        
+        {/* FREE badge */}
+        <Badge 
+          className="absolute -top-2 -right-2 bg-green-500 hover:bg-green-500 text-white animate-pulse"
+        >
+          FREE
+        </Badge>
+      </div>
 
       {/* Chat window */}
       <AnimatePresence>
@@ -197,13 +207,18 @@ export default function ChatBot() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="absolute bottom-20 right-0 w-80 sm:w-96 h-96 bg-background border rounded-lg shadow-xl flex flex-col overflow-hidden"
+            className="absolute bottom-20 right-0 w-80 sm:w-96 h-[28rem] bg-background border rounded-lg shadow-xl flex flex-col overflow-hidden"
           >
             {/* Chat header */}
-            <div className="p-3 border-b bg-primary text-primary-foreground flex items-center">
-              <Bot size={20} className="mr-2" />
-              <span className="font-medium">Mobile Dev Assistant</span>
-              <Sparkles size={16} className="ml-2 text-yellow-300" />
+            <div className="p-3 border-b bg-primary text-primary-foreground flex items-center justify-between">
+              <div className="flex items-center">
+                <Bot size={20} className="mr-2" />
+                <span className="font-medium">Free Tech Assistant</span>
+                <Sparkles size={16} className="ml-2 text-yellow-300" />
+              </div>
+              <Badge variant="outline" className="bg-green-500/20 text-green-500 border-green-500">
+                No Cost
+              </Badge>
             </div>
             
             {/* Chat messages */}
@@ -244,7 +259,7 @@ export default function ChatBot() {
             {/* Chat input */}
             <div className="p-3 border-t bg-muted/30 flex items-center gap-2">
               <Input
-                placeholder="Ask a question..."
+                placeholder="Ask anything for free..."
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 onKeyPress={handleInputKeyPress}
