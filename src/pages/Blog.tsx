@@ -1,4 +1,3 @@
-
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import BlogCard from '@/components/blog/BlogCard';
 import { useState, useEffect } from 'react';
@@ -19,8 +18,10 @@ import {
   Shuffle,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGoogleAdsense } from '@/hooks/useGoogleAdsense';
+import { Helmet } from 'react-helmet';
 
-// Tech categories with icons
+// Tech categories with icons - optimized for high CPC keywords
 const techCategories = [
   { name: 'All', icon: Book },
   { name: 'Android', icon: Smartphone },
@@ -28,34 +29,71 @@ const techCategories = [
   { name: 'iOS', icon: Apple },
   { name: 'React Native', icon: Terminal },
   { name: 'Mobile Dev', icon: Grid },
-  { name: 'DevOps', icon: Settings },
-  { name: 'Random', icon: Shuffle },
+  { name: 'Finance', icon: Store }, // Added high CPC category
+  { name: 'Education', icon: ShoppingBag }, // Added high CPC category
 ];
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  useGoogleAdsense(); // Hook to reinitialize ads when component mounts
 
   const { posts: filteredPosts } = useBlogPosts(selectedCategory);
 
+  // Render AdSense ad
+  const renderAd = () => {
+    return (
+      <div className="my-8 text-center">
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block' }}
+          data-ad-client="ca-pub-5354730220539777"
+          data-ad-slot="3479208831"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    );
+  };
+
   useEffect(() => {
     // Track blog page view with category filter
-    trackEvent('blog_page_view', { 
+    trackEvent('blog_page_view', {
       category: selectedCategory || 'all',
-      posts_count: filteredPosts.length
+      posts_count: filteredPosts.length,
+      screen_width: window.innerWidth,
+      utm_source:
+        new URLSearchParams(window.location.search).get('utm_source') ||
+        'direct',
     });
   }, [selectedCategory, filteredPosts.length]);
 
   const handleCategoryChange = (category: string) => {
     const newCategory = category === 'All' ? null : category;
     setSelectedCategory(newCategory);
-    trackEvent('blog_category_filter', { 
-      category: newCategory || 'all'
+    trackEvent('blog_category_filter', {
+      category: newCategory || 'all',
+      is_high_cpc: ['Finance', 'Education'].includes(category) ? 'yes' : 'no',
     });
   };
 
   return (
     <div className="min-h-screen pt-24 pb-20">
+      <Helmet>
+        <title>
+          Mobile App Development Blog | Tips & Tutorials | Mahendran
+        </title>
+        <meta
+          name="description"
+          content="Learn mobile development tips, Flutter tutorials, React Native guides, and iOS/Android best practices for creating high-performance apps."
+        />
+        <meta
+          name="keywords"
+          content="mobile app development, Flutter tutorials, React Native tips, iOS development, Android development, app monetization"
+        />
+      </Helmet>
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -74,6 +112,9 @@ const Blog = () => {
             </p>
           </div>
         </AnimatedSection>
+
+        {/* First ad placement - top of page */}
+        {renderAd()}
 
         <AnimatedSection delay={100}>
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 mb-16">
@@ -127,9 +168,21 @@ const Blog = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                onClick={() => trackEvent('blog_card_click', { blog_id: post.id, blog_title: post.title })}
+                onClick={() =>
+                  trackEvent('blog_card_click', {
+                    blog_id: post.id,
+                    blog_title: post.title,
+                    position: index,
+                    current_category: selectedCategory || 'all',
+                  })
+                }
               >
                 <BlogCard post={post} />
+
+                {/* Insert ad after every 3rd post */}
+                {(index + 1) % 3 === 0 &&
+                  index !== filteredPosts.length - 1 &&
+                  renderAd()}
               </motion.div>
             ))}
           </div>
@@ -149,6 +202,9 @@ const Blog = () => {
             </div>
           )}
         </AnimatedSection>
+
+        {/* Bottom ad placement */}
+        {renderAd()}
       </div>
     </div>
   );
