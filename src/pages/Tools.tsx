@@ -4,6 +4,9 @@ import { Helmet } from 'react-helmet';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Tool components
 import RegexTester from '@/components/tools/RegexTester';
@@ -20,6 +23,8 @@ import TechToolFinder from '@/components/tools/TechToolFinder';
 
 const Tools = () => {
   const [activeTab, setActiveTab] = useState('regex');
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollRef = useState<HTMLDivElement | null>(null);
   
   const tools = [
     {
@@ -84,6 +89,20 @@ const Tools = () => {
     }
   ];
 
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+      setScrollPosition(scrollRef.current.scrollLeft - 200);
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+      setScrollPosition(scrollRef.current.scrollLeft + 200);
+    }
+  };
+
   return (
     <div className="min-h-screen pt-24 pb-16 bg-gradient-to-b from-background to-background/95">
       <Helmet>
@@ -111,18 +130,46 @@ const Tools = () => {
 
         <AnimatedSection delay={100}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="mb-8">
-              <TabsList className="inline-flex p-1 rounded-lg bg-secondary/80 overflow-x-auto max-w-full flex-wrap justify-center">
-                {tools.map((tool) => (
-                  <TabsTrigger
-                    key={tool.id}
-                    value={tool.id}
-                    className="px-4 py-2 whitespace-nowrap"
-                  >
-                    {tool.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            <div className="mb-8 relative">
+              <div className="flex items-center justify-between mb-2">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-sm border hover:bg-secondary/80"
+                  onClick={scrollLeft}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                <div className="w-full overflow-hidden mx-8" ref={(el) => scrollRef.current = el}>
+                  <TabsList className="inline-flex p-1 rounded-lg bg-secondary/80 overflow-x-auto w-max min-w-full">
+                    {tools.map((tool) => (
+                      <TabsTrigger
+                        key={tool.id}
+                        value={tool.id}
+                        className="px-4 py-2 whitespace-nowrap"
+                      >
+                        {tool.name}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-sm border hover:bg-secondary/80"
+                  onClick={scrollRight}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="flex justify-center mt-2">
+                <p className="text-xs text-muted-foreground">
+                  Scroll horizontally to see more tools →
+                </p>
+              </div>
             </div>
             
             {tools.map((tool) => (
