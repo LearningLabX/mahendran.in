@@ -1,4 +1,3 @@
-
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -39,7 +38,7 @@ const PageTracker = () => {
 
     // Track page view when route changes
     trackPageView(location.pathname, getPageTitle(location.pathname));
-    
+
     // Reinitialize AdSense ads on route change
     if (window.adsbygoogle && window.adsbygoogle.push) {
       try {
@@ -60,15 +59,27 @@ const App = () => {
         <TooltipProvider>
           <Helmet>
             <title>Mahendran | Mobile App Development Expert</title>
-            <meta name="description" content="Mobile app development blog, tutorials and resources for Flutter, React Native, Android and iOS developers." />
-            <meta name="keywords" content="mobile development, Flutter, React Native, app monetization, iOS development, Android development" />
-            <meta property="og:title" content="Mahendran | Mobile App Development" />
-            <meta property="og:description" content="Expert tips and tutorials on mobile app development" />
+            <meta
+              name="description"
+              content="Mobile app development blog, tutorials and resources for Flutter, React Native, Android and iOS developers."
+            />
+            <meta
+              name="keywords"
+              content="mobile development, Flutter, React Native, app monetization, iOS development, Android development"
+            />
+            <meta
+              property="og:title"
+              content="Mahendran | Mobile App Development"
+            />
+            <meta
+              property="og:description"
+              content="Expert tips and tutorials on mobile app development"
+            />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://mahendran.info" />
             <meta name="twitter:card" content="summary_large_image" />
           </Helmet>
-          
+
           <Toaster />
           <Sonner />
           <AnimatePresence>
@@ -86,7 +97,7 @@ const App = () => {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
-              <Footer />
+              {/* <Footer /> */}
             </BrowserRouter>
           </AnimatePresence>
         </TooltipProvider>

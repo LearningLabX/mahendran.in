@@ -1,4 +1,3 @@
-
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import BlogCard from '@/components/blog/BlogCard';
 import { useState, useEffect } from 'react';
@@ -47,46 +46,54 @@ const Blog = () => {
       <div className="my-8 text-center">
         <ins
           className="adsbygoogle"
-          style={{ display: "block" }}
+          style={{ display: 'block' }}
           data-ad-client="ca-pub-5354730220539777"
           data-ad-slot="3479208831"
           data-ad-format="auto"
           data-full-width-responsive="true"
         ></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     );
   };
 
   useEffect(() => {
     // Track blog page view with category filter
-    trackEvent('blog_page_view', { 
+    trackEvent('blog_page_view', {
       category: selectedCategory || 'all',
       posts_count: filteredPosts.length,
       screen_width: window.innerWidth,
-      utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'direct'
+      utm_source:
+        new URLSearchParams(window.location.search).get('utm_source') ||
+        'direct',
     });
   }, [selectedCategory, filteredPosts.length]);
 
   const handleCategoryChange = (category: string) => {
     const newCategory = category === 'All' ? null : category;
     setSelectedCategory(newCategory);
-    trackEvent('blog_category_filter', { 
+    trackEvent('blog_category_filter', {
       category: newCategory || 'all',
-      is_high_cpc: ['Finance', 'Education'].includes(category) ? 'yes' : 'no'
+      is_high_cpc: ['Finance', 'Education'].includes(category) ? 'yes' : 'no',
     });
   };
 
   return (
     <div className="min-h-screen pt-24 pb-20">
       <Helmet>
-        <title>Mobile App Development Blog | Tips & Tutorials | Mahendran</title>
-        <meta name="description" content="Learn mobile development tips, Flutter tutorials, React Native guides, and iOS/Android best practices for creating high-performance apps." />
-        <meta name="keywords" content="mobile app development, Flutter tutorials, React Native tips, iOS development, Android development, app monetization" />
+        <title>
+          Mobile App Development Blog | Tips & Tutorials | Mahendran
+        </title>
+        <meta
+          name="description"
+          content="Learn mobile development tips, Flutter tutorials, React Native guides, and iOS/Android best practices for creating high-performance apps."
+        />
+        <meta
+          name="keywords"
+          content="mobile app development, Flutter tutorials, React Native tips, iOS development, Android development, app monetization"
+        />
       </Helmet>
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -161,17 +168,21 @@ const Blog = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                onClick={() => trackEvent('blog_card_click', { 
-                  blog_id: post.id, 
-                  blog_title: post.title,
-                  position: index,
-                  current_category: selectedCategory || 'all'
-                })}
+                onClick={() =>
+                  trackEvent('blog_card_click', {
+                    blog_id: post.id,
+                    blog_title: post.title,
+                    position: index,
+                    current_category: selectedCategory || 'all',
+                  })
+                }
               >
                 <BlogCard post={post} />
-                
+
                 {/* Insert ad after every 3rd post */}
-                {(index + 1) % 3 === 0 && index !== filteredPosts.length - 1 && renderAd()}
+                {(index + 1) % 3 === 0 &&
+                  index !== filteredPosts.length - 1 &&
+                  renderAd()}
               </motion.div>
             ))}
           </div>
@@ -191,7 +202,7 @@ const Blog = () => {
             </div>
           )}
         </AnimatedSection>
-        
+
         {/* Bottom ad placement */}
         {renderAd()}
       </div>
