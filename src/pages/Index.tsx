@@ -1,6 +1,11 @@
 import Hero from '@/components/home/Hero';
 import { type BlogPost } from '@/hooks/useBlogPosts';
-import { type Project } from '@/components/projects/ProjectCard';
+import ProjectCard, { type Project } from '@/components/projects/ProjectCard';
+import AnimatedTechIcons from '@/components/home/AnimatedTechIcons';
+import TechBlogsSection from '@/components/home/TechBlogsSection';
+import AnimatedSection from '@/components/ui/AnimatedSection';
+import { ArrowRight, Link } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 // Sample data for featured projects
 const featuredProjects: Project[] = [
@@ -85,8 +90,8 @@ const Index = () => {
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Featured Projects</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Showcasing some of my best work in mobile app development,
-                from concept to deployment.
+                Showcasing some of my best work in mobile app development, from
+                concept to deployment.
               </p>
             </div>
           </AnimatedSection>
