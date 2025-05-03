@@ -1,3 +1,4 @@
+
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -17,6 +18,7 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import Games from './pages/Games';
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
@@ -95,6 +97,7 @@ const App = () => {
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:blogId" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/games" element={<Games />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
