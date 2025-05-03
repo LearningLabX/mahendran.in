@@ -1,4 +1,3 @@
-
 import { useRef } from 'react';
 import { useScroll, useTransform } from 'framer-motion';
 import HeroBackground from './HeroBackground';
