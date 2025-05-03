@@ -1,4 +1,3 @@
-
 import Hero from '@/components/home/Hero';
 import { type BlogPost } from '@/hooks/useBlogPosts';
 import ProjectCard, { type Project } from '@/components/projects/ProjectCard';
@@ -76,29 +75,40 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <Hero />
-
       {/* About Section */}
-      <About />
-      
+      {/* <About /> */}
       {/* Tech Tool Finder - NEW SECTION */}
-      <section className="py-16 bg-background">
+      {/* <section className="py-16 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-3">Mobile Dev Tools</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Discover the best tools, resources, and services for building exceptional mobile applications
+                Discover the best tools, resources, and services for building
+                exceptional mobile applications
               </p>
             </div>
           </AnimatedSection>
           <TechToolFinder />
         </div>
-      </section>
-
+      </section> */}
       {/* Blog Section with AdSense */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
+      <AnimatedSection delay={50}>
+        <div className="my-8 text-center">
+          <ins
+            className="adsbygoogle"
+            style={{ display: 'block' }}
+            data-ad-client="ca-pub-5354730220539777"
+            data-ad-slot="3479208831"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </AnimatedSection>
+      {/* <section className="py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
+      {/* <AnimatedSection>
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="h-px w-8 bg-primary/50"></span>
@@ -110,10 +120,10 @@ const Index = () => {
                   Thoughts, tutorials, and insights on mobile development.
               </p>
             </div>
-          </AnimatedSection>
-          
-          {/* AdSense Ad */}
-          <AnimatedSection delay={100}>
+          </AnimatedSection> */}
+
+      {/* AdSense Ad */}
+      {/* <AnimatedSection delay={100}>
             <div className="my-8 text-center">
               <ins
                 className="adsbygoogle"
@@ -123,12 +133,14 @@ const Index = () => {
                 data-ad-format="auto"
                 data-full-width-responsive="true"
               ></ins>
-              <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+              <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+              </script>
             </div>
-          </AnimatedSection>
-          
-          {/* Featured Blog Posts */}
-          <AnimatedSection delay={200} className="mb-8">
+          </AnimatedSection> */}
+
+      {/* Featured Blog Posts */}
+      {/* <AnimatedSection delay={200} className="mb-8">
             <div className="flex flex-col md:flex-row justify-between items-center mb-12">
               <div className="text-center md:text-left mb-6 md:mb-0">
                 <h3 className="text-2xl font-bold mb-2">Featured Posts</h3>
@@ -143,9 +155,9 @@ const Index = () => {
                 </a>
               </Button>
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
+          </AnimatedSection> */}
+      {/* </div>
+      </section> */}
     </div>
   );
 };
