@@ -1,9 +1,11 @@
+
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import BlogCard from '@/components/blog/BlogCard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
+import { trackEvent } from '@/lib/analytics';
 import {
   Book,
   Terminal,
@@ -35,6 +37,22 @@ const Blog = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const { posts: filteredPosts } = useBlogPosts(selectedCategory);
+
+  useEffect(() => {
+    // Track blog page view with category filter
+    trackEvent('blog_page_view', { 
+      category: selectedCategory || 'all',
+      posts_count: filteredPosts.length
+    });
+  }, [selectedCategory, filteredPosts.length]);
+
+  const handleCategoryChange = (category: string) => {
+    const newCategory = category === 'All' ? null : category;
+    setSelectedCategory(newCategory);
+    trackEvent('blog_category_filter', { 
+      category: newCategory || 'all'
+    });
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -81,11 +99,7 @@ const Blog = () => {
                         ? 'bg-primary text-primary-foreground'
                         : 'hover:bg-secondary/80'
                     }`}
-                    onClick={() =>
-                      setSelectedCategory(
-                        category.name === 'All' ? null : category.name
-                      )
-                    }
+                    onClick={() => handleCategoryChange(category.name)}
                   >
                     <motion.div
                       animate={{
@@ -113,6 +127,7 @@ const Blog = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
+                onClick={() => trackEvent('blog_card_click', { blog_id: post.id, blog_title: post.title })}
               >
                 <BlogCard post={post} />
               </motion.div>
@@ -126,7 +141,7 @@ const Blog = () => {
               </p>
               <Button
                 variant="outline"
-                onClick={() => setSelectedCategory(null)}
+                onClick={() => handleCategoryChange('All')}
                 className="mt-4"
               >
                 View All Posts

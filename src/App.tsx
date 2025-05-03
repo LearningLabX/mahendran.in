@@ -2,10 +2,11 @@ import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@/hooks/useTheme';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackPageView } from '@/lib/analytics';
 
 // Pages
 import Index from './pages/Index';
@@ -22,6 +23,24 @@ import Footer from './components/layout/Footer';
 
 const queryClient = new QueryClient();
 
+// Page tracker component
+const PageTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Extract page title from path
+    const getPageTitle = (pathname: string) => {
+      if (pathname === '/') return 'Home';
+      return pathname.charAt(1).toUpperCase() + pathname.slice(2).split('/')[0];
+    };
+
+    // Track page view when route changes
+    trackPageView(location.pathname, getPageTitle(location.pathname));
+  }, [location]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <ThemeProvider defaultTheme="light">
@@ -31,6 +50,7 @@ const App = () => {
           <Sonner />
           <AnimatePresence>
             <BrowserRouter>
+              <PageTracker />
               <Navbar />
               <main className="min-h-screen">
                 <Routes>
