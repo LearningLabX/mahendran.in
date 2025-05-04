@@ -1,4 +1,3 @@
-
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -21,6 +20,7 @@ import NotFound from './pages/NotFound';
 import Games from './pages/Games';
 import Tools from './pages/Tools';
 import Templates from './pages/Templates';
+import DevDailyChallenge from './pages/DevDailyChallenge';
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
@@ -102,6 +102,7 @@ const App = () => {
                   <Route path="/games" element={<Games />} />
                   <Route path="/tools" element={<Tools />} />
                   <Route path="/templates" element={<Templates />} />
+                  <Route path="/daily-challenge" element={<DevDailyChallenge />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
