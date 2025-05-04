@@ -1,258 +1,239 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Copy, Check, Binary } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/hooks/use-toast';
+import { Label } from '@/components/ui/label';
+import { Copy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-type ConversionType = 'uuid-to-bin' | 'bin-to-uuid' | 'sql-formatter';
+export default function SqlHelper() {
+  const [uuid, setUuid] = useState('550e8400-e29b-41d4-a716-446655440000');
+  const [binary, setBinary] = useState('');
+  const [sqlQuery, setSqlQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('uuid-to-bin');
+  const { toast } = useToast();
 
-const SqlHelper = () => {
-  const [activeTab, setActiveTab] = useState<ConversionType>('uuid-to-bin');
-  const [uuidInput, setUuidInput] = useState('123e4567-e89b-12d3-a456-426614174000');
-  const [binInput, setBinInput] = useState('0x123e4567e89b12d3a456426614174000');
-  const [sqlInput, setSqlInput] = useState('SELECT id, name, email FROM users WHERE status = "active" AND created_at > "2023-01-01"');
-  const [output, setOutput] = useState('');
-  const [copied, setCopied] = useState(false);
+  // Generate a random UUID
+  const generateRandomUUID = () => {
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+    setUuid(uuid);
+  };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  // Convert UUID to Binary format for MySQL
+  const convertUUIDtoBIN = (uuid: string) => {
+    if (!uuid || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid)) {
+      return '';
+    }
+
+    // Remove hyphens
+    return uuid.replace(/-/g, '');
+  };
+
+  // Convert Binary to UUID format
+  const convertBINtoUUID = (bin: string) => {
+    if (!bin || !/^[0-9a-f]{32}$/i.test(bin)) {
+      return '';
+    }
+
+    // Add hyphens in UUID format
+    return `${bin.substring(0, 8)}-${bin.substring(8, 12)}-${bin.substring(12, 16)}-${bin.substring(
+      16,
+      20
+    )}-${bin.substring(20)}`;
+  };
+
+  // Generate SQL query for UUID to BIN conversion
+  const generateUUIDtoBINQuery = (uuid: string) => {
+    if (!uuid) return '';
+    return `-- UUID to Binary conversion for MySQL
+-- Original UUID: ${uuid}
+
+-- Method 1: Using UNHEX(REPLACE())
+INSERT INTO your_table (id, uuid_column) 
+VALUES (1, UNHEX(REPLACE('${uuid}', '-', '')));
+
+-- Method 2: Using UUID_TO_BIN() (MySQL 8.0+)
+INSERT INTO your_table (id, uuid_column) 
+VALUES (1, UUID_TO_BIN('${uuid}'));
+
+-- Method 3: Using UUID_TO_BIN() with swap flag (MySQL 8.0+)
+-- This stores in an optimized order for indexing
+INSERT INTO your_table (id, uuid_column) 
+VALUES (1, UUID_TO_BIN('${uuid}', 1));`;
+  };
+
+  // Generate SQL query for BIN to UUID conversion
+  const generateBINtoUUIDQuery = (bin: string) => {
+    if (!bin) return '';
+    return `-- Binary to UUID conversion for MySQL
+-- Original Binary (hex): ${bin}
+
+-- Method 1: Using HEX() and INSERT()
+SELECT 
+  INSERT(
+    INSERT(
+      INSERT(
+        INSERT(HEX(uuid_column), 9, 0, '-'),
+        14, 0, '-'), 
+      19, 0, '-'), 
+    24, 0, '-')
+AS formatted_uuid 
+FROM your_table WHERE id = 1;
+
+-- Method 2: Using BIN_TO_UUID() (MySQL 8.0+)
+SELECT BIN_TO_UUID(uuid_column) 
+FROM your_table WHERE id = 1;
+
+-- Method 3: Using BIN_TO_UUID() with swap flag (MySQL 8.0+)
+-- Use this if UUID was stored with swap flag = 1
+SELECT BIN_TO_UUID(uuid_column, 1) 
+FROM your_table WHERE id = 1;`;
+  };
+
+  // Update values when inputs change
+  useEffect(() => {
+    if (activeTab === 'uuid-to-bin') {
+      setBinary(convertUUIDtoBIN(uuid));
+      setSqlQuery(generateUUIDtoBINQuery(uuid));
+    } else {
+      setUuid(convertBINtoUUID(binary));
+      setSqlQuery(generateBINtoUUIDQuery(binary));
+    }
+  }, [uuid, binary, activeTab]);
+
+  // Copy to clipboard
+  const copyToClipboard = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
     toast({
-      title: "Copied to clipboard",
-      description: "The output has been copied to your clipboard.",
-      duration: 3000,
+      title: `${type} copied to clipboard`,
+      description: "You can now paste it wherever you need.",
     });
   };
 
-  const convertUuidToBin = () => {
-    try {
-      // Validate UUID format
-      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-      if (!uuidRegex.test(uuidInput)) {
-        toast({
-          title: "Invalid UUID format",
-          description: "Please enter a valid UUID in the format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // MySQL UUID_TO_BIN function equivalent in SQL syntax
-      const uuidWithoutDash = uuidInput.replace(/-/g, '');
-      const tableName = "my_table";
-      const columnName = "uuid_column";
-      
-      const insertSql = `-- Insert with UUID_TO_BIN()
-INSERT INTO ${tableName} (${columnName}) 
-VALUES (UUID_TO_BIN('${uuidInput}', 1));`;
-      
-      const selectSql = `-- Select with BIN_TO_UUID()
-SELECT BIN_TO_UUID(${columnName}, 1) as uuid_text 
-FROM ${tableName};`;
-      
-      const hexFormatted = `-- Hex representation for UUID
-0x${uuidWithoutDash}`;
-      
-      const explanation = `-- Explanation:
--- UUID_TO_BIN(uuid, swap_flag) converts a UUID to binary
--- The second parameter (1) swaps time-low and time-high parts for better indexing
--- This makes the binary UUID more efficient for indexing time-based UUIDs`;
-
-      setOutput(`${insertSql}\n\n${selectSql}\n\n${hexFormatted}\n\n${explanation}\n\n-- Direct MySQL functions
-SELECT UUID_TO_BIN('${uuidInput}', 1); -- Converts to binary
-SELECT HEX(UUID_TO_BIN('${uuidInput}', 1)); -- Shows hex value of binary`);
-    } catch (error) {
-      toast({
-        title: "Conversion error",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const convertBinToUuid = () => {
-    try {
-      let binValue = binInput.trim();
-      
-      // Handle different formats
-      if (binValue.startsWith('0x')) {
-        binValue = binValue.substring(2); // Remove 0x prefix if present
-      }
-      
-      // Make sure it's a valid hex string
-      if (!/^[0-9a-f]+$/i.test(binValue)) {
-        toast({
-          title: "Invalid hex format",
-          description: "Please enter a valid hexadecimal value",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      const tableName = "my_table";
-      const columnName = "binary_uuid";
-      
-      const sqlStatement = `-- Convert binary to UUID using BIN_TO_UUID
-SELECT BIN_TO_UUID(${columnName}, 1) as uuid
-FROM ${tableName}
-WHERE id = 1;`;
-      
-      const hexFormat = `-- Or using direct hex input
-SELECT BIN_TO_UUID(UNHEX('${binValue}'), 1) AS uuid;`;
-      
-      const selectWithJoin = `-- Example in JOIN query
-SELECT 
-  u.name, 
-  BIN_TO_UUID(u.id, 1) as user_uuid
-FROM users u
-JOIN orders o ON u.id = o.user_id
-WHERE o.status = 'completed';`;
-      
-      setOutput(`${sqlStatement}\n\n${hexFormat}\n\n${selectWithJoin}\n\n-- Full UUID value if conversion worked:
--- xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`);
-    } catch (error) {
-      toast({
-        title: "Conversion error",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const formatSql = () => {
-    try {
-      // Basic SQL formatting logic
-      let formatted = sqlInput
-        .replace(/\s+/g, ' ')                     // Replace multiple spaces with single space
-        .replace(/\s*,\s*/g, ', ')                // Format commas
-        .replace(/\s*=\s*/g, ' = ')               // Format equals
-        .replace(/\s*>\s*/g, ' > ')               // Format greater than
-        .replace(/\s*<\s*/g, ' < ')               // Format less than
-        .replace(/\s*SELECT\s/gi, 'SELECT\n  ')   // Format SELECT
-        .replace(/\s*FROM\s/gi, '\nFROM\n  ')     // Format FROM
-        .replace(/\s*WHERE\s/gi, '\nWHERE\n  ')   // Format WHERE
-        .replace(/\s*AND\s/gi, '\n  AND ')        // Format AND
-        .replace(/\s*OR\s/gi, '\n  OR ')          // Format OR
-        .replace(/\s*ORDER BY\s/gi, '\nORDER BY\n  '); // Format ORDER BY
-
-      setOutput(formatted);
-    } catch (error) {
-      toast({
-        title: "Formatting error",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleConvert = () => {
-    switch (activeTab) {
-      case 'uuid-to-bin':
-        convertUuidToBin();
-        break;
-      case 'bin-to-uuid':
-        convertBinToUuid();
-        break;
-      case 'sql-formatter':
-        formatSql();
-        break;
-    }
-  };
-
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Binary className="h-5 w-5" />
-          <span>UUID/Binary Converter for MySQL</span>
-        </CardTitle>
-        <CardDescription>
-          Convert between UUID and binary formats for efficient MySQL storage, format SQL queries
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ConversionType)} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="uuid-to-bin">UUID to Binary</TabsTrigger>
-            <TabsTrigger value="bin-to-uuid">Binary to UUID</TabsTrigger>
-            <TabsTrigger value="sql-formatter">SQL Formatter</TabsTrigger>
-          </TabsList>
+    <div className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid grid-cols-2 w-full">
+          <TabsTrigger value="uuid-to-bin">UUID → Binary</TabsTrigger>
+          <TabsTrigger value="bin-to-uuid">Binary → UUID</TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="uuid-to-bin" className="mt-4 space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">UUID</label>
+        <TabsContent value="uuid-to-bin" className="space-y-4 mt-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label htmlFor="uuid-input">UUID</Label>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={generateRandomUUID}
+              >
+                Generate Random UUID
+              </Button>
+            </div>
+            <div className="flex gap-2">
               <Input 
-                value={uuidInput}
-                onChange={(e) => setUuidInput(e.target.value)}
-                placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
-                className="font-mono text-sm"
+                id="uuid-input"
+                value={uuid} 
+                onChange={(e) => setUuid(e.target.value)} 
+                placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
+                className="font-mono"
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Enter a UUID in the standard format with dashes
-              </p>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => copyToClipboard(uuid, 'UUID')}
+              >
+                <Copy size={16} />
+              </Button>
             </div>
-          </TabsContent>
-
-          <TabsContent value="bin-to-uuid" className="mt-4 space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Binary UUID (hex format)</label>
-              <Input 
-                value={binInput}
-                onChange={(e) => setBinInput(e.target.value)}
-                placeholder="0x123e4567e89b12d3a456426614174000"
-                className="font-mono text-sm"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Enter a hex value with or without 0x prefix, or a MySQL column name
-              </p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="sql-formatter" className="mt-4 space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">SQL Query</label>
-              <Textarea 
-                value={sqlInput}
-                onChange={(e) => setSqlInput(e.target.value)}
-                rows={5}
-                className="font-mono text-sm"
-                placeholder="Enter SQL query to format"
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <div className="mt-4">
-          <Button onClick={handleConvert} className="w-full">Convert</Button>
-        </div>
-
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium">Output</label>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-7 px-2"
-              onClick={copyToClipboard}
-            >
-              {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-            </Button>
           </div>
-          <Textarea 
-            value={output}
-            readOnly
-            rows={8}
-            className="font-mono text-sm"
-          />
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
 
-export default SqlHelper;
+          <div>
+            <Label htmlFor="binary-output" className="mb-2 block">Binary Format (HEX)</Label>
+            <div className="flex gap-2">
+              <Input 
+                id="binary-output"
+                value={binary} 
+                readOnly 
+                className="font-mono bg-muted"
+              />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => copyToClipboard(binary, 'Binary format')}
+              >
+                <Copy size={16} />
+              </Button>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bin-to-uuid" className="space-y-4 mt-4">
+          <div>
+            <Label htmlFor="binary-input" className="mb-2 block">Binary Format (HEX)</Label>
+            <div className="flex gap-2">
+              <Input 
+                id="binary-input"
+                value={binary} 
+                onChange={(e) => setBinary(e.target.value)} 
+                placeholder="e.g. 550e8400e29b41d4a716446655440000"
+                className="font-mono"
+              />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => copyToClipboard(binary, 'Binary format')}
+              >
+                <Copy size={16} />
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="uuid-output" className="mb-2 block">UUID</Label>
+            <div className="flex gap-2">
+              <Input 
+                id="uuid-output"
+                value={uuid} 
+                readOnly 
+                className="font-mono bg-muted"
+              />
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => copyToClipboard(uuid, 'UUID')}
+              >
+                <Copy size={16} />
+              </Button>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <Label htmlFor="sql-query">MySQL Query</Label>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => copyToClipboard(sqlQuery, 'SQL query')}
+          >
+            Copy Query
+          </Button>
+        </div>
+        <Textarea 
+          id="sql-query"
+          value={sqlQuery} 
+          readOnly 
+          className="min-h-[200px] font-mono bg-muted"
+        />
+      </div>
+    </div>
+  );
+}
