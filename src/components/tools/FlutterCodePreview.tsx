@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, Share2, Code } from 'lucide-react';
+import { Copy, Check, Share2, Code, Play } from 'lucide-react';
 
 const FlutterCodePreview = () => {
   const [code, setCode] = useState(`import 'package:flutter/material.dart';
@@ -65,6 +65,7 @@ class MyHomePage extends StatelessWidget {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('code');
   const { toast } = useToast();
+  const [isRendering, setIsRendering] = useState(false);
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(code);
@@ -84,6 +85,14 @@ class MyHomePage extends StatelessWidget {
       title: "Link created",
       description: "Shareable link copied to clipboard",
     });
+  };
+
+  const handlePreviewClick = () => {
+    setIsRendering(true);
+    setActiveTab('preview');
+    setTimeout(() => {
+      setIsRendering(false);
+    }, 1000);
   };
 
   const insertTemplate = (template: string) => {
@@ -135,15 +144,49 @@ class MyHomePage extends StatelessWidget {
   onChanged: (value) {},
 )`;
         break;
+      case 'card':
+        snippet = `Card(
+  elevation: 4.0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  child: Container(
+    padding: EdgeInsets.all(16.0),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Card Title',
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 8.0),
+        Text('Card content goes here...'),
+        SizedBox(height: 16.0),
+        ElevatedButton(
+          child: Text('ACTION'),
+          onPressed: () {},
+        ),
+      ],
+    ),
+  ),
+)`;
+        break;
       default:
         return;
     }
     
     setCode(currentCode => currentCode + '\n\n// New widget\n' + snippet);
+    toast({
+      title: "Template inserted",
+      description: "You can now use this template in your code",
+    });
   };
 
-  // Simplified preview renderer
-  const renderPreview = () => {
+  // Extract key information from code for preview
+  const extractCodeInfo = () => {
     // Extract component name from code
     const componentNameMatch = code.match(/class\s+(\w+)\s+extends\s+StatelessWidget|StatefulWidget/);
     const componentName = componentNameMatch ? componentNameMatch[1] : 'Flutter Component';
@@ -153,30 +196,41 @@ class MyHomePage extends StatelessWidget {
     const primaryColor = primaryColorMatch ? primaryColorMatch[1] : 'blue';
     
     // Extract text from code for preview
-    const textMatch = code.match(/'([^']+)'/);
+    const textMatch = code.match(/['"]([^'"]+)['"]/);
     const previewText = textMatch ? textMatch[1] : 'Hello Flutter!';
+    
+    return {
+      componentName,
+      primaryColor,
+      previewText,
+    };
+  };
+
+  // Simplified preview renderer
+  const renderPreview = () => {
+    const { componentName, primaryColor, previewText } = extractCodeInfo();
     
     return (
       <div className={`w-full h-[400px] flex items-center justify-center ${theme === 'dark' ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
         <div className="text-center p-4">
-          <div className={`bg-${primaryColor}-500 text-white p-4 rounded-lg shadow-lg mb-4`}>
-            <p className="font-bold text-lg">{componentName}</p>
+          <div className={`bg-blue-500 text-white p-4 rounded-lg shadow-lg mb-4 ${isRendering ? 'animate-pulse' : ''}`}>
+            <p className="font-bold text-lg">{isRendering ? "Rendering..." : componentName}</p>
             <div className="p-3 mt-2 bg-white bg-opacity-10 rounded">
               <p>{previewText}</p>
             </div>
           </div>
           <div className={`mt-4 p-4 border rounded-md ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <div className="flex items-center justify-center space-x-4">
-              <div className={`w-12 h-12 rounded-full bg-${primaryColor}-500 flex items-center justify-center`}>
+              <div className={`w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center`}>
                 <Code className="h-6 w-6 text-white" />
               </div>
-              <div className={`w-12 h-12 rounded-full border-2 border-${primaryColor}-500 flex items-center justify-center`}>
-                <Code className={`h-6 w-6 text-${primaryColor}-500`} />
+              <div className={`w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center`}>
+                <Code className={`h-6 w-6 text-blue-500`} />
               </div>
             </div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            This is a visual representation of your Flutter code.
+            {isRendering ? "Rendering preview..." : "Visual representation of your Flutter code"}
           </p>
         </div>
       </div>
@@ -196,6 +250,7 @@ class MyHomePage extends StatelessWidget {
               <SelectItem value="appbar">AppBar</SelectItem>
               <SelectItem value="bottomnav">Bottom Navigation</SelectItem>
               <SelectItem value="textfield">TextField</SelectItem>
+              <SelectItem value="card">Card</SelectItem>
             </SelectContent>
           </Select>
           
@@ -210,6 +265,14 @@ class MyHomePage extends StatelessWidget {
         </div>
         
         <div className="flex space-x-2">
+          <Button 
+            variant="secondary" 
+            size="sm"
+            onClick={handlePreviewClick}
+          >
+            <Play className="h-4 w-4 mr-1" />
+            Preview
+          </Button>
           <Button 
             variant="outline" 
             size="sm"
@@ -251,6 +314,16 @@ class MyHomePage extends StatelessWidget {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <div className="space-y-2 pt-4 border-t">
+        <h3 className="text-lg font-medium">Instructions</h3>
+        <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+          <li>Enter your Flutter widget code in the editor</li>
+          <li>Use the "Insert Template" dropdown to add common Flutter widgets</li>
+          <li>Click "Preview" to see a visual representation of your code</li>
+          <li>Toggle the switch to see how your UI looks in dark mode</li>
+        </ul>
+      </div>
     </div>
   );
 };

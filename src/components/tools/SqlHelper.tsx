@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Copy } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function SqlHelper() {
@@ -13,6 +13,7 @@ export default function SqlHelper() {
   const [binary, setBinary] = useState('');
   const [sqlQuery, setSqlQuery] = useState('');
   const [activeTab, setActiveTab] = useState('uuid-to-bin');
+  const [copied, setCopied] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Generate a random UUID
@@ -96,7 +97,20 @@ SELECT BIN_TO_UUID(uuid_column, 1)
 FROM your_table WHERE id = 1;`;
   };
 
-  // Update values when inputs change
+  // Handle manual conversion when input changes
+  const handleConversion = () => {
+    if (activeTab === 'uuid-to-bin') {
+      const converted = convertUUIDtoBIN(uuid);
+      setBinary(converted);
+      setSqlQuery(generateUUIDtoBINQuery(uuid));
+    } else {
+      const converted = convertBINtoUUID(binary);
+      setUuid(converted);
+      setSqlQuery(generateBINtoUUIDQuery(binary));
+    }
+  };
+
+  // Update values when tab changes
   useEffect(() => {
     if (activeTab === 'uuid-to-bin') {
       setBinary(convertUUIDtoBIN(uuid));
@@ -105,11 +119,28 @@ FROM your_table WHERE id = 1;`;
       setUuid(convertBINtoUUID(binary));
       setSqlQuery(generateBINtoUUIDQuery(binary));
     }
-  }, [uuid, binary, activeTab]);
+  }, [activeTab]);
+
+  // Update values when inputs change
+  useEffect(() => {
+    if (activeTab === 'uuid-to-bin') {
+      setBinary(convertUUIDtoBIN(uuid));
+      setSqlQuery(generateUUIDtoBINQuery(uuid));
+    }
+  }, [uuid, activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'bin-to-uuid') {
+      setUuid(convertBINtoUUID(binary));
+      setSqlQuery(generateBINtoUUIDQuery(binary));
+    }
+  }, [binary, activeTab]);
 
   // Copy to clipboard
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
+    setCopied(type);
+    setTimeout(() => setCopied(null), 2000);
     toast({
       title: `${type} copied to clipboard`,
       description: "You can now paste it wherever you need.",
@@ -149,7 +180,7 @@ FROM your_table WHERE id = 1;`;
                 size="icon" 
                 onClick={() => copyToClipboard(uuid, 'UUID')}
               >
-                <Copy size={16} />
+                {copied === 'UUID' ? <Check size={16} /> : <Copy size={16} />}
               </Button>
             </div>
           </div>
@@ -168,7 +199,7 @@ FROM your_table WHERE id = 1;`;
                 size="icon" 
                 onClick={() => copyToClipboard(binary, 'Binary format')}
               >
-                <Copy size={16} />
+                {copied === 'Binary format' ? <Check size={16} /> : <Copy size={16} />}
               </Button>
             </div>
           </div>
@@ -190,7 +221,7 @@ FROM your_table WHERE id = 1;`;
                 size="icon" 
                 onClick={() => copyToClipboard(binary, 'Binary format')}
               >
-                <Copy size={16} />
+                {copied === 'Binary format' ? <Check size={16} /> : <Copy size={16} />}
               </Button>
             </div>
           </div>
@@ -209,7 +240,7 @@ FROM your_table WHERE id = 1;`;
                 size="icon" 
                 onClick={() => copyToClipboard(uuid, 'UUID')}
               >
-                <Copy size={16} />
+                {copied === 'UUID' ? <Check size={16} /> : <Copy size={16} />}
               </Button>
             </div>
           </div>
@@ -224,6 +255,7 @@ FROM your_table WHERE id = 1;`;
             size="sm" 
             onClick={() => copyToClipboard(sqlQuery, 'SQL query')}
           >
+            {copied === 'SQL query' ? <Check className="mr-1 h-4 w-4" /> : <Copy className="mr-1 h-4 w-4" />}
             Copy Query
           </Button>
         </div>
@@ -233,6 +265,20 @@ FROM your_table WHERE id = 1;`;
           readOnly 
           className="min-h-[200px] font-mono bg-muted"
         />
+      </div>
+
+      <div className="pt-4 border-t">
+        <h3 className="text-lg font-medium mb-2">How to use UUID with MySQL</h3>
+        <div className="text-sm text-muted-foreground space-y-2">
+          <p>
+            MySQL stores UUID in binary format to save space and improve performance.
+            A UUID stored as CHAR(36) takes 36 bytes, while binary format only uses 16 bytes.
+          </p>
+          <p>
+            Use the queries above to convert between UUID and binary formats when 
+            inserting data or querying your database.
+          </p>
+        </div>
       </div>
     </div>
   );
