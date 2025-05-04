@@ -1,4 +1,3 @@
-
 export const userProfileData = {
   user: {
     username: 'flutter_master',
@@ -7,7 +6,7 @@ export const userProfileData = {
     xp: 1240,
     streak: 7,
     challengesSolved: 42,
-    joinDate: 'Apr 12, 2023'
+    joinDate: 'Apr 12, 2023',
   },
   achievements: [
     {
@@ -16,7 +15,7 @@ export const userProfileData = {
       description: 'Completed challenges for 7 days in a row',
       emoji: '🔥',
       unlocked: true,
-      xpReward: 100
+      xpReward: 100,
     },
     {
       id: 'a2',
@@ -24,7 +23,7 @@ export const userProfileData = {
       description: 'Earned your first 1000 XP',
       emoji: '🌟',
       unlocked: true,
-      xpReward: 150
+      xpReward: 150,
     },
     {
       id: 'a3',
@@ -32,7 +31,7 @@ export const userProfileData = {
       description: 'Completed 10 UI challenges',
       emoji: '🧙',
       unlocked: true,
-      xpReward: 200
+      xpReward: 200,
     },
     {
       id: 'a4',
@@ -40,7 +39,7 @@ export const userProfileData = {
       description: 'Fixed 5 debugging challenges',
       emoji: '🔍',
       unlocked: true,
-      xpReward: 100
+      xpReward: 100,
     },
     {
       id: 'a5',
@@ -48,7 +47,7 @@ export const userProfileData = {
       description: 'Solved 10 algorithm challenges',
       emoji: '🧠',
       unlocked: false,
-      xpReward: 300
+      xpReward: 300,
     },
     {
       id: 'a6',
@@ -56,8 +55,8 @@ export const userProfileData = {
       description: 'Completed challenges for 30 days in a row',
       emoji: '📅',
       unlocked: false,
-      xpReward: 500
-    }
+      xpReward: 500,
+    },
   ],
   solvedChallenges: [
     {
@@ -120,7 +119,7 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
       child: Icon(icon),
     );
   }
-}`
+}`,
     },
     {
       id: 'c2',
@@ -185,7 +184,7 @@ class User {
       posts: posts,
     );
   }
-}`
+}`,
     },
     {
       id: 'c5',
@@ -209,7 +208,7 @@ class User {
       .replaceAll(' ', '-')
       .replaceAll(RegExp(r'[^\w-]'), '');
   }
-}`
+}`,
     },
     {
       id: 'c6',
@@ -274,7 +273,7 @@ class CounterWidget extends StatelessWidget {
       ],
     );
   }
-}`
-    }
-  ]
+}`,
+    },
+  ],
 };
