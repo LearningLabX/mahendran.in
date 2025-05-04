@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -24,7 +24,7 @@ import TechToolFinder from '@/components/tools/TechToolFinder';
 const Tools = () => {
   const [activeTab, setActiveTab] = useState('regex');
   const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollRef = useState<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   
   const tools = [
     {
@@ -141,7 +141,7 @@ const Tools = () => {
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 
-                <div className="w-full overflow-hidden mx-8" ref={(el) => scrollRef.current = el}>
+                <div className="w-full overflow-hidden mx-8" ref={scrollRef}>
                   <TabsList className="inline-flex p-1 rounded-lg bg-secondary/80 overflow-x-auto w-max min-w-full">
                     {tools.map((tool) => (
                       <TabsTrigger

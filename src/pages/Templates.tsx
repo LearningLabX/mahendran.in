@@ -7,10 +7,29 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ExternalLink, Star } from 'lucide-react';
+import { 
+  ExternalLink, 
+  Star, 
+  X, 
+  Check, 
+  ChevronLeft, 
+  ChevronRight, 
+  Download 
+} from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog"
 
 const Templates = () => {
   const [category, setCategory] = useState('all');
+  const scrollRef = useRef<HTMLDivElement>(null);
   
   const categories = [
     { id: 'all', name: 'All Templates' },
@@ -32,7 +51,10 @@ const Templates = () => {
       price: '$59',
       features: ['Light & Dark mode', 'GetX State Management', 'Mock API Integration'],
       rating: 4.8,
-      reviews: 42
+      reviews: 42,
+      overview: 'A comprehensive e-commerce template that includes all essential screens for building a mobile shopping app. Includes product grids, detail pages, cart, checkout process, and order management.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
     {
       id: 'chat-deluxe',
@@ -43,7 +65,10 @@ const Templates = () => {
       price: '$49',
       features: ['Real-time chat UI', 'Voice/Video Call screens', 'Stories & Status'],
       rating: 4.9,
-      reviews: 36
+      reviews: 36,
+      overview: 'A fully-featured chat UI kit designed for messaging apps. Includes multiple message bubble styles, voice and video call screens, contact lists, and status/story UI components.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
     {
       id: 'crm-pro',
@@ -54,7 +79,10 @@ const Templates = () => {
       price: '$79',
       features: ['Contact Management', 'Deal Pipeline View', 'Activity Tracking'],
       rating: 4.7,
-      reviews: 28
+      reviews: 28,
+      overview: 'A professional CRM dashboard template designed for sales teams and small businesses. Track leads, manage customer relationships, and monitor sales progress all in one place.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
     {
       id: 'realestate-finder',
@@ -65,7 +93,10 @@ const Templates = () => {
       price: '$69',
       features: ['Map View Integration', 'Property Details', 'Filtering & Sorting'],
       rating: 4.6,
-      reviews: 19
+      reviews: 19,
+      overview: 'A real estate app template with map integration, property listings, and detailed property screens. Perfect for creating property rental or sales applications.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
     {
       id: 'auth-complete',
@@ -76,7 +107,10 @@ const Templates = () => {
       price: '$39',
       features: ['Social Login', 'OTP Verification', 'Password Reset Flow'],
       rating: 4.9,
-      reviews: 52
+      reviews: 52,
+      overview: 'A comprehensive authentication UI package with every screen you need for a modern mobile app. Includes sign-up, login, password reset, social login integration, and more.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
     {
       id: 'admin-dashboard',
@@ -87,9 +121,24 @@ const Templates = () => {
       price: '$89',
       features: ['10+ Chart Components', 'Data Tables', 'User Management'],
       rating: 4.8,
-      reviews: 31
+      reviews: 31,
+      overview: 'A powerful admin dashboard template for mobile apps. Includes responsive charts, data tables, and comprehensive analytics views for monitoring app performance and user activity.',
+      includedFiles: ['Source Code (.zip)', 'Documentation (.pdf)', 'Design Files (.fig)'],
+      previewLink: '#'
     },
   ];
+  
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
   
   const filteredTemplates = category === 'all' 
     ? templates 
@@ -122,18 +171,46 @@ const Templates = () => {
 
         <AnimatedSection delay={100}>
           <Tabs value={category} onValueChange={setCategory} className="w-full">
-            <div className="flex justify-center mb-8">
-              <TabsList className="flex space-x-1 rounded-lg bg-secondary/80 p-1 overflow-x-auto max-w-full sm:max-w-3xl">
-                {categories.map((cat) => (
-                  <TabsTrigger
-                    key={cat.id}
-                    value={cat.id}
-                    className="whitespace-nowrap"
-                  >
-                    {cat.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            <div className="relative mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-sm border hover:bg-secondary/80"
+                  onClick={scrollLeft}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                <div className="w-full overflow-hidden mx-8" ref={scrollRef}>
+                  <TabsList className="flex space-x-1 rounded-lg bg-secondary/80 p-1 overflow-x-auto w-max min-w-full">
+                    {categories.map((cat) => (
+                      <TabsTrigger
+                        key={cat.id}
+                        value={cat.id}
+                        className="whitespace-nowrap"
+                      >
+                        {cat.name}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-sm border hover:bg-secondary/80"
+                  onClick={scrollRight}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="flex justify-center mt-2">
+                <p className="text-xs text-muted-foreground">
+                  Scroll horizontally to see more categories →
+                </p>
+              </div>
             </div>
             
             <TabsContent value={category} className="mt-2">
@@ -173,7 +250,69 @@ const Templates = () => {
                         <span className="mx-1">•</span>
                         <span>{template.reviews} reviews</span>
                       </div>
-                      <Button size="sm">View Details</Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm">View Details</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>{template.title}</DialogTitle>
+                            <DialogDescription>{template.description}</DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-6 py-4">
+                            <div>
+                              <AspectRatio ratio={16/9} className="bg-muted rounded-md overflow-hidden">
+                                <img 
+                                  src={template.image} 
+                                  alt={template.title} 
+                                  className="object-cover w-full h-full"
+                                />
+                              </AspectRatio>
+                            </div>
+                            
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Overview</h3>
+                              <p className="text-muted-foreground">{template.overview}</p>
+                            </div>
+                            
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Features</h3>
+                              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                {template.features.map((feature, index) => (
+                                  <li key={index} className="flex items-center gap-2">
+                                    <Check className="h-4 w-4 text-green-500" />
+                                    <span>{feature}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            
+                            <div>
+                              <h3 className="text-lg font-medium mb-2">Included Files</h3>
+                              <ul className="space-y-1">
+                                {template.includedFiles.map((file, index) => (
+                                  <li key={index} className="flex items-center gap-2">
+                                    <Download className="h-4 w-4 text-primary" />
+                                    <span>{file}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                          <DialogFooter className="flex justify-between items-center">
+                            <div className="flex items-center gap-1">
+                              <span className="text-lg font-bold">{template.price}</span>
+                              <Badge variant="secondary">License: Commercial</Badge>
+                            </div>
+                            <div className="flex gap-2">
+                              <DialogClose asChild>
+                                <Button variant="outline">Close</Button>
+                              </DialogClose>
+                              <Button>Purchase Now</Button>
+                            </div>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     </CardFooter>
                   </Card>
                 ))}
