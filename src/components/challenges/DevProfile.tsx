@@ -5,18 +5,39 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Star, Award, Trophy, Calendar, Zap } from 'lucide-react';
+import { Star, Award, Trophy, Calendar, Zap, Code, Eye } from 'lucide-react';
 import { userProfileData } from '@/data/userProfileData';
 import { useState } from 'react';
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const DevProfile = () => {
   const [activeTab, setActiveTab] = useState('achievements');
+  const [showSolution, setShowSolution] = useState<string | null>(null);
   const { user, achievements, solvedChallenges } = userProfileData;
   
   // Calculate stats
   const completionRate = Math.round((solvedChallenges.length / (solvedChallenges.length + 5)) * 100);
   const xpToNextLevel = 100 - (user.xp % 100);
   const currentLevel = Math.floor(user.xp / 100) + 1;
+
+  const handleViewSolution = (challengeId: string) => {
+    setShowSolution(challengeId);
+  };
+
+  const handleCloseDialog = () => {
+    setShowSolution(null);
+  };
+
+  // Find the selected challenge solution
+  const selectedChallenge = solvedChallenges.find(
+    challenge => challenge.id === showSolution
+  );
 
   return (
     <div className="space-y-8">
@@ -134,7 +155,14 @@ const DevProfile = () => {
                     
                     <div className="flex items-center justify-between mt-4 text-sm">
                       <span className="text-muted-foreground">{challenge.completedDate}</span>
-                      <Button size="sm" variant="outline">View Solution</Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleViewSolution(challenge.id)}
+                        className="flex gap-2"
+                      >
+                        <Eye className="h-4 w-4" /> View Solution
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -143,6 +171,32 @@ const DevProfile = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Solution Dialog */}
+      {showSolution && (
+        <Dialog open={!!showSolution} onOpenChange={handleCloseDialog}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>{selectedChallenge?.title}</DialogTitle>
+              <DialogDescription>
+                Solved on {selectedChallenge?.completedDate} • {selectedChallenge?.xpEarned} XP earned
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 my-4">
+              <div className="rounded-md bg-secondary/20 p-4 overflow-auto">
+                <pre className="font-mono text-sm whitespace-pre-wrap">
+                  {selectedChallenge?.solution || "No solution available for this challenge."}
+                </pre>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                {selectedChallenge?.tags.map(tag => (
+                  <Badge key={tag} variant="outline">{tag}</Badge>
+                ))}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

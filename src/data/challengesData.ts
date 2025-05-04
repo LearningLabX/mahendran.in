@@ -1,4 +1,3 @@
-
 export interface Challenge {
   id: string;
   title: string;
@@ -11,6 +10,7 @@ export interface Challenge {
   instructions?: string;
   codeSnippet?: string;
   expectedOutput?: string;
+  solutionExample?: string;
 }
 
 export const challengesData: Challenge[] = [
@@ -35,7 +35,63 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
   // TODO: Implement the build method with animation
   
 }`,
-    expectedOutput: 'A bottom navigation bar with 4 items that animate when selected.'
+    expectedOutput: 'A bottom navigation bar with 4 items that animate when selected.',
+    solutionExample: `class CustomBottomNav extends StatefulWidget {
+  @override
+  _CustomBottomNavState createState() => _CustomBottomNavState();
+}
+
+class _CustomBottomNavState extends State<CustomBottomNav> {
+  int _selectedIndex = 0;
+  
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      type: BottomNavigationBarType.fixed,
+      items: [
+        BottomNavigationBarItem(
+          icon: _buildIcon(0, Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: _buildIcon(1, Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: _buildIcon(2, Icons.favorite),
+          label: 'Favorites',
+        ),
+        BottomNavigationBarItem(
+          icon: _buildIcon(3, Icons.person),
+          label: 'Profile',
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildIcon(int index, IconData icon) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: _selectedIndex == index ? Theme.of(context).primaryColor.withOpacity(0.2) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(
+        icon,
+        color: _selectedIndex == index ? Theme.of(context).primaryColor : Colors.grey,
+      ),
+    );
+  }
+}`
   },
   {
     id: 'c2',
@@ -65,7 +121,63 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
 }
 
 // TODO: Create User class and fromJson method`,
-    expectedOutput: 'A User object with name, email, preferences and posts properly parsed.'
+    expectedOutput: 'A User object with name, email, preferences and posts properly parsed.',
+    solutionExample: `class Post {
+  final int id;
+  final String title;
+  
+  Post({required this.id, required this.title});
+  
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'] as int,
+      title: json['title'] as String,
+    );
+  }
+}
+
+class Preferences {
+  final String theme;
+  final bool notifications;
+  
+  Preferences({required this.theme, required this.notifications});
+  
+  factory Preferences.fromJson(Map<String, dynamic> json) {
+    return Preferences(
+      theme: json['theme'] as String,
+      notifications: json['notifications'] as bool,
+    );
+  }
+}
+
+class User {
+  final int id;
+  final String name;
+  final String email;
+  final Preferences preferences;
+  final List<Post> posts;
+  
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.preferences,
+    required this.posts,
+  });
+  
+  factory User.fromJson(Map<String, dynamic> json) {
+    final userJson = json['user'];
+    return User(
+      id: userJson['id'] as int,
+      name: userJson['name'] as String,
+      email: userJson['email'] as String,
+      preferences: Preferences.fromJson(userJson['preferences']),
+      posts: (userJson['posts'] as List)
+        .map((postJson) => Post.fromJson(postJson))
+        .toList(),
+    );
+  }
+}`
   },
   {
     id: 'c3',

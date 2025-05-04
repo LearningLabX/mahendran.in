@@ -15,9 +15,15 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { challengesData } from '@/data/challengesData';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 const ChallengesFeed = () => {
   const [filter, setFilter] = useState('all');
+  const [selectedChallenge, setSelectedChallenge] = useState(null);
+  const [solutionCode, setSolutionCode] = useState('');
+  const [submittingSolution, setSubmittingSolution] = useState(false);
+  const { toast } = useToast();
   
   // Filter challenges based on selected filter
   const filteredChallenges = filter === 'all' 
@@ -41,6 +47,31 @@ const ChallengesFeed = () => {
       default:
         return <Badge>Unknown</Badge>;
     }
+  };
+
+  const handleOpenChallenge = (challenge) => {
+    setSelectedChallenge(challenge);
+    // Pre-fill solution code with the challenge code snippet if available
+    setSolutionCode(challenge.codeSnippet || '');
+  };
+
+  const handleSubmitSolution = () => {
+    setSubmittingSolution(true);
+    
+    // Simulate submission process with timeout
+    setTimeout(() => {
+      // Add code to handle actual solution submission
+      
+      // Show success message
+      toast({
+        title: "Solution submitted!",
+        description: `Your solution for "${selectedChallenge?.title}" has been submitted successfully.`,
+      });
+      
+      setSubmittingSolution(false);
+      // Close dialog after submission
+      setSelectedChallenge(null);
+    }, 1500);
   };
 
   return (
@@ -100,41 +131,42 @@ const ChallengesFeed = () => {
               
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button size="sm">Start Challenge</Button>
+                  <Button size="sm" onClick={() => handleOpenChallenge(challenge)}>Start Challenge</Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-4xl">
                   <DialogHeader>
-                    <DialogTitle>{challenge.title}</DialogTitle>
+                    <DialogTitle>{selectedChallenge?.title}</DialogTitle>
                     <DialogDescription>
-                      {challenge.difficulty} • {challenge.timeLimit} minutes • {challenge.xpReward} XP
+                      {selectedChallenge?.difficulty} • {selectedChallenge?.timeLimit} minutes • {selectedChallenge?.xpReward} XP
                     </DialogDescription>
                   </DialogHeader>
                   
                   <div className="grid gap-6 py-4">
                     <div className="space-y-4">
                       <h3 className="text-lg font-medium">Challenge Description</h3>
-                      <p className="text-muted-foreground">{challenge.description}</p>
+                      <p className="text-muted-foreground">{selectedChallenge?.description}</p>
                       
-                      {challenge.instructions && (
+                      {selectedChallenge?.instructions && (
                         <div className="mt-4 p-4 bg-secondary/20 rounded-md">
                           <h4 className="font-medium mb-2">Instructions:</h4>
-                          <p>{challenge.instructions}</p>
+                          <p>{selectedChallenge?.instructions}</p>
                         </div>
                       )}
                       
-                      {challenge.codeSnippet && (
-                        <div className="mt-4">
-                          <h4 className="font-medium mb-2">Code Snippet:</h4>
-                          <pre className="bg-secondary/30 p-4 rounded-md overflow-x-auto">
-                            <code>{challenge.codeSnippet}</code>
-                          </pre>
-                        </div>
-                      )}
+                      <div className="mt-4">
+                        <h4 className="font-medium mb-2">Code Solution:</h4>
+                        <Textarea 
+                          className="font-mono text-sm h-64 bg-secondary/30 p-4"
+                          value={solutionCode}
+                          onChange={(e) => setSolutionCode(e.target.value)}
+                          placeholder="Write your solution here..."
+                        />
+                      </div>
 
-                      {challenge.expectedOutput && (
+                      {selectedChallenge?.expectedOutput && (
                         <div className="mt-4">
                           <h4 className="font-medium mb-2">Expected Output:</h4>
-                          <p className="text-muted-foreground">{challenge.expectedOutput}</p>
+                          <p className="text-muted-foreground">{selectedChallenge?.expectedOutput}</p>
                         </div>
                       )}
                     </div>
@@ -143,9 +175,14 @@ const ChallengesFeed = () => {
                   <DialogFooter className="flex justify-between items-center flex-wrap gap-4">
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4" />
-                      <span>Time limit: {challenge.timeLimit} minutes</span>
+                      <span>Time limit: {selectedChallenge?.timeLimit} minutes</span>
                     </div>
-                    <Button>Submit Solution</Button>
+                    <Button 
+                      onClick={handleSubmitSolution}
+                      disabled={submittingSolution || !solutionCode.trim()}
+                    >
+                      {submittingSolution ? 'Submitting...' : 'Submit Solution'}
+                    </Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
