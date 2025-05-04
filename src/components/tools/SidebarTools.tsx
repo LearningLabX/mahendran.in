@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { 
   Code, Database, Binary, Wrench, LayoutDashboard, 
-  Lightbulb, LayoutList, Search
+  Lightbulb, LayoutList, Smartphone
 } from 'lucide-react';
 
 import { ToolContent } from './ToolContent';
@@ -23,7 +23,6 @@ import { devTools } from '@/data/devTools';
 
 export default function SidebarTools() {
   const [activeToolId, setActiveToolId] = useState('flutter-code');
-  const [searchTerm, setSearchTerm] = useState('');
   
   // Get the currently active tool
   const activeTool = devTools.find((tool) => tool.id === activeToolId);
@@ -48,54 +47,24 @@ export default function SidebarTools() {
     { id: 'other', name: 'Other', icon: Code }
   ];
 
-  // Filter tools based on search term
-  const filterTools = (tools: typeof devTools) => {
-    if (!searchTerm) return tools;
-    
-    return tools.filter(tool => 
-      tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tool.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-  };
-
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-full min-h-screen w-full">
         <Sidebar className="border-r">
           <SidebarContent>
-            <div className="p-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <input 
-                  type="search" 
-                  placeholder="Search tools..." 
-                  className="w-full rounded-md bg-white/5 border border-input h-9 pl-8 pr-3 text-sm"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
-
             {categories.map((category) => {
               const categoryTools = toolsByCategory[category.id] || [];
-              const filteredTools = filterTools(categoryTools);
-              
-              // Skip categories with no matching tools when searching
-              if (searchTerm && filteredTools.length === 0) return null;
               
               return (
                 <SidebarGroup key={category.id}>
                   <SidebarGroupLabel>
                     <category.icon className="mr-2 h-4 w-4" />
                     <span>{category.name}</span>
-                    {!searchTerm && (
-                      <span className="ml-auto text-xs text-muted-foreground">{categoryTools.length}</span>
-                    )}
+                    <span className="ml-auto text-xs text-muted-foreground">{categoryTools.length}</span>
                   </SidebarGroupLabel>
                   <SidebarGroupContent>
                     <SidebarMenu>
-                      {filteredTools.map((tool) => (
+                      {categoryTools.map((tool) => (
                         <SidebarMenuItem key={tool.id}>
                           <SidebarMenuButton 
                             isActive={activeToolId === tool.id}

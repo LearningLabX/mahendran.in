@@ -15,11 +15,15 @@ import BoilerplateGenerator from '@/components/tools/BoilerplateGenerator';
 import MarkdownConverter from '@/components/tools/MarkdownConverter';
 import SqlHelper from '@/components/tools/SqlHelper';
 import FlutterCodePreview from '@/components/tools/FlutterCodePreview';
+import JsonFormatterTool from '@/components/tools/JsonFormatterTool';
+import DiffChecker from '@/components/tools/DiffChecker';
+import UiToCode from '@/components/tools/UiToCode';
+import HttpStatusCodes from '@/components/tools/HttpStatusCodes';
 
 // Define a mapping between tool IDs and their components
 const toolComponents: Record<string, React.ComponentType> = {
   'regex': RegexTester,
-  'json': JsonFormatter,
+  'json': JsonFormatterTool,
   'base64': Base64Tool,
   'color': ColorConverter,
   'date': DateConverter,
@@ -29,6 +33,10 @@ const toolComponents: Record<string, React.ComponentType> = {
   'markdown': MarkdownConverter,
   'sql': SqlHelper,
   'flutter-code': FlutterCodePreview,
+  'json-formatter': JsonFormatterTool,
+  'diff-checker': DiffChecker,
+  'ui-to-code': UiToCode,
+  'http-status': HttpStatusCodes,
 };
 
 interface ToolContentProps {
@@ -43,11 +51,11 @@ export const ToolContent: React.FC<ToolContentProps> = ({ tool }) => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Tool Not Available</CardTitle>
-          <CardDescription>The component for this tool is not available.</CardDescription>
+          <CardTitle>Tool Coming Soon</CardTitle>
+          <CardDescription>This tool is currently under development.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Please check back later for this tool.</p>
+          <p>We're working hard to bring you this developer tool. Check back soon for updates!</p>
         </CardContent>
       </Card>
     );

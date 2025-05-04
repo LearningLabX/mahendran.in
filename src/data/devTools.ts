@@ -1,6 +1,8 @@
+
 import { 
   Code, Database, Binary, Smartphone, Wrench, LayoutDashboard, 
-  Menu, ChevronRight, Lightbulb, LayoutList
+  Lightbulb, LayoutList, FileJson, FileSearch, Http, FileCode, 
+  FileCheck, FileText, FileArchive, FileX
 } from 'lucide-react';
 
 export interface DevTool {
@@ -39,7 +41,7 @@ export const devTools: DevTool[] = [
     name: 'JSON to Dart Model',
     description: 'Format, validate and convert JSON to Dart classes',
     category: 'flutter',
-    icon: Code,
+    icon: FileJson,
     tags: ['Flutter', 'JSON', 'Dart'],
   },
   {
@@ -93,7 +95,7 @@ export const devTools: DevTool[] = [
     name: 'Markdown to HTML',
     description: 'Convert Markdown to HTML with live preview',
     category: 'frontend',
-    icon: Code,
+    icon: FileText,
     tags: ['Markdown', 'HTML', 'Preview'],
   },
   
@@ -143,7 +145,7 @@ export const devTools: DevTool[] = [
     name: 'JWT Decoder',
     description: 'Decode and validate JWT tokens',
     category: 'backend',
-    icon: Code,
+    icon: FileCode,
     isPro: true,
     isNew: true,
     tags: ['JWT', 'Authentication', 'Security'],
@@ -164,7 +166,7 @@ export const devTools: DevTool[] = [
     name: 'Regex Tester',
     description: 'Test regular expressions with instant feedback',
     category: 'utilities',
-    icon: Code,
+    icon: FileSearch,
     tags: ['Regex', 'Testing', 'Validation'],
   },
   {
@@ -172,15 +174,24 @@ export const devTools: DevTool[] = [
     name: 'JSON Formatter',
     description: 'Format and validate JSON data',
     category: 'utilities',
-    icon: Code,
+    icon: FileJson,
     tags: ['JSON', 'Formatting', 'Validation'],
+  },
+  {
+    id: 'diff-checker',
+    name: 'Diff Checker',
+    description: 'Compare two text snippets and highlight differences',
+    category: 'utilities',
+    icon: FileCheck,
+    isNew: true,
+    tags: ['Diff', 'Comparison', 'Text'],
   },
   {
     id: 'yaml-converter',
     name: 'YAML ↔ JSON',
     description: 'Convert between YAML and JSON formats',
     category: 'utilities',
-    icon: Code,
+    icon: FileArchive,
     tags: ['YAML', 'JSON', 'Conversion'],
   },
   {
@@ -192,12 +203,13 @@ export const devTools: DevTool[] = [
     tags: ['Lorem Ipsum', 'Text', 'Placeholder'],
   },
   {
-    id: 'diff-checker',
-    name: 'Diff Checker',
-    description: 'Compare two text snippets and highlight differences',
+    id: 'http-status',
+    name: 'HTTP Status Codes',
+    description: 'Reference for HTTP status codes and their meanings',
     category: 'utilities',
-    icon: Code,
-    tags: ['Diff', 'Comparison', 'Text'],
+    icon: Http,
+    isNew: true,
+    tags: ['HTTP', 'Status Codes', 'API'],
   },
 
   // Design Tools
@@ -231,7 +243,7 @@ export const devTools: DevTool[] = [
     name: 'SVG Optimizer',
     description: 'Optimize SVG files for web and mobile',
     category: 'design',
-    icon: LayoutList,
+    icon: FileCode,
     isPro: true,
     tags: ['SVG', 'Optimization', 'Design'],
   },
@@ -272,7 +284,7 @@ export const devTools: DevTool[] = [
     name: 'Boilerplate Generator',
     description: 'Generate code templates for Flutter projects',
     category: 'other',
-    icon: Code,
+    icon: FileCode,
     tags: ['Boilerplate', 'Templates', 'Flutter'],
   },
   {
@@ -280,23 +292,15 @@ export const devTools: DevTool[] = [
     name: 'Cron Expression Parser',
     description: 'Parse and explain cron expressions',
     category: 'other',
-    icon: Code,
+    icon: FileX,
     tags: ['Cron', 'Scheduling', 'Backend'],
-  },
-  {
-    id: 'http-status',
-    name: 'HTTP Status Codes',
-    description: 'Reference for HTTP status codes and their meanings',
-    category: 'other',
-    icon: LayoutDashboard,
-    tags: ['HTTP', 'Status Codes', 'API'],
   },
   {
     id: 'mime-types',
     name: 'MIME Types Reference',
     description: 'Lookup MIME types for different file extensions',
     category: 'other',
-    icon: LayoutList,
+    icon: FileText,
     tags: ['MIME', 'File Types', 'Reference'],
   },
 ];

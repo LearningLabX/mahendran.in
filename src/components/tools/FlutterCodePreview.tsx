@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
@@ -66,6 +66,12 @@ class MyHomePage extends StatelessWidget {
   const [activeTab, setActiveTab] = useState('code');
   const { toast } = useToast();
   const [isRendering, setIsRendering] = useState(false);
+  const [parsedCode, setParsedCode] = useState(code);
+
+  // Effect to update preview when code changes
+  useEffect(() => {
+    setParsedCode(code);
+  }, [code]);
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(code);
@@ -90,6 +96,7 @@ class MyHomePage extends StatelessWidget {
   const handlePreviewClick = () => {
     setIsRendering(true);
     setActiveTab('preview');
+    setParsedCode(code);
     setTimeout(() => {
       setIsRendering(false);
     }, 1000);
@@ -188,15 +195,15 @@ class MyHomePage extends StatelessWidget {
   // Extract key information from code for preview
   const extractCodeInfo = () => {
     // Extract component name from code
-    const componentNameMatch = code.match(/class\s+(\w+)\s+extends\s+StatelessWidget|StatefulWidget/);
+    const componentNameMatch = parsedCode.match(/class\s+(\w+)\s+extends\s+StatelessWidget|StatefulWidget/);
     const componentName = componentNameMatch ? componentNameMatch[1] : 'Flutter Component';
     
     // Extract colors from code for preview
-    const primaryColorMatch = code.match(/color:\s*Colors\.(\w+)/);
+    const primaryColorMatch = parsedCode.match(/color:\s*Colors\.(\w+)/);
     const primaryColor = primaryColorMatch ? primaryColorMatch[1] : 'blue';
     
     // Extract text from code for preview
-    const textMatch = code.match(/['"]([^'"]+)['"]/);
+    const textMatch = parsedCode.match(/['"]([^'"]+)['"]/);
     const previewText = textMatch ? textMatch[1] : 'Hello Flutter!';
     
     return {
