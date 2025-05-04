@@ -265,7 +265,7 @@ class CounterWidget extends StatelessWidget {
     final counter = context.watch<CounterModel>();
     return Column(
       children: [
-        Text('Count: ${counter.count}'),
+        Text('Count: {counter.count}'),
         ElevatedButton(
           onPressed: counter.increment,
           child: Text('Increment'),
