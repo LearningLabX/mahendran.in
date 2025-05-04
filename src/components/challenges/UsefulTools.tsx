@@ -6,7 +6,8 @@ import RegexTester from '@/components/tools/RegexTester';
 import JsonFormatter from '@/components/tools/JsonFormatter';
 import Base64Tool from '@/components/tools/Base64Tool';
 import ColorConverter from '@/components/tools/ColorConverter';
-import { FileCode, Brackets, Shuffle, Palette } from 'lucide-react';
+import SqlHelper from '@/components/tools/SqlHelper';
+import { Binary, Brackets, FileCode, Palette } from 'lucide-react';
 
 const UsefulTools = () => {
   const [activeTool, setActiveTool] = useState('regex');
@@ -30,8 +31,8 @@ const UsefulTools = () => {
               <span>JSON Formatter</span>
             </TabsTrigger>
             <TabsTrigger value="base64" className="flex flex-col items-center gap-1 py-3 px-4 h-auto">
-              <Shuffle className="h-5 w-5" />
-              <span>Base64 Tool</span>
+              <Binary className="h-5 w-5" />
+              <span>Binary Tools</span>
             </TabsTrigger>
             <TabsTrigger value="color" className="flex flex-col items-center gap-1 py-3 px-4 h-auto">
               <Palette className="h-5 w-5" />
@@ -45,13 +46,13 @@ const UsefulTools = () => {
             <CardTitle>
               {activeTool === 'regex' && 'Regular Expression Tester'}
               {activeTool === 'json' && 'JSON Formatter & Validator'}
-              {activeTool === 'base64' && 'Base64 Encoder/Decoder'}
+              {activeTool === 'base64' && 'Binary & Base64 Tools'}
               {activeTool === 'color' && 'Flutter Color Converter'}
             </CardTitle>
             <CardDescription>
               {activeTool === 'regex' && 'Test and debug regular expressions with real-time matching'}
               {activeTool === 'json' && 'Format, validate and beautify your JSON data'}
-              {activeTool === 'base64' && 'Encode or decode text to/from Base64 format'}
+              {activeTool === 'base64' && 'Encode/decode Base64 and convert UUIDs to binary format'}
               {activeTool === 'color' && 'Convert between HEX, RGB and Flutter MaterialColor'}
             </CardDescription>
           </CardHeader>
@@ -63,7 +64,7 @@ const UsefulTools = () => {
               <JsonFormatter />
             </TabsContent>
             <TabsContent value="base64" className="mt-0">
-              <Base64Tool />
+              {activeTool === 'base64' ? <SqlHelper /> : <Base64Tool />}
             </TabsContent>
             <TabsContent value="color" className="mt-0">
               <ColorConverter />

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, Binary } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
 
@@ -13,7 +13,7 @@ type ConversionType = 'uuid-to-bin' | 'bin-to-uuid' | 'sql-formatter';
 const SqlHelper = () => {
   const [activeTab, setActiveTab] = useState<ConversionType>('uuid-to-bin');
   const [uuidInput, setUuidInput] = useState('123e4567-e89b-12d3-a456-426614174000');
-  const [binInput, setBinInput] = useState('');
+  const [binInput, setBinInput] = useState('0x123e4567e89b12d3a456426614174000');
   const [sqlInput, setSqlInput] = useState('SELECT id, name, email FROM users WHERE status = "active" AND created_at > "2023-01-01"');
   const [output, setOutput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -43,10 +43,29 @@ const SqlHelper = () => {
       }
 
       // MySQL UUID_TO_BIN function equivalent in SQL syntax
-      const sqlStatement = `SELECT UUID_TO_BIN('${uuidInput}', 1) as binary_uuid;`;
-      const hexRepresentation = uuidInput.replace(/-/g, '');
+      const uuidWithoutDash = uuidInput.replace(/-/g, '');
+      const tableName = "my_table";
+      const columnName = "uuid_column";
       
-      setOutput(`-- SQL Function\n${sqlStatement}\n\n-- Hex representation\n0x${hexRepresentation}\n\n-- Usage in queries\nINSERT INTO users (id, name) VALUES (UUID_TO_BIN('${uuidInput}', 1), 'John Doe');`);
+      const insertSql = `-- Insert with UUID_TO_BIN()
+INSERT INTO ${tableName} (${columnName}) 
+VALUES (UUID_TO_BIN('${uuidInput}', 1));`;
+      
+      const selectSql = `-- Select with BIN_TO_UUID()
+SELECT BIN_TO_UUID(${columnName}, 1) as uuid_text 
+FROM ${tableName};`;
+      
+      const hexFormatted = `-- Hex representation for UUID
+0x${uuidWithoutDash}`;
+      
+      const explanation = `-- Explanation:
+-- UUID_TO_BIN(uuid, swap_flag) converts a UUID to binary
+-- The second parameter (1) swaps time-low and time-high parts for better indexing
+-- This makes the binary UUID more efficient for indexing time-based UUIDs`;
+
+      setOutput(`${insertSql}\n\n${selectSql}\n\n${hexFormatted}\n\n${explanation}\n\n-- Direct MySQL functions
+SELECT UUID_TO_BIN('${uuidInput}', 1); -- Converts to binary
+SELECT HEX(UUID_TO_BIN('${uuidInput}', 1)); -- Shows hex value of binary`);
     } catch (error) {
       toast({
         title: "Conversion error",
@@ -58,8 +77,44 @@ const SqlHelper = () => {
 
   const convertBinToUuid = () => {
     try {
-      const sqlStatement = `SELECT BIN_TO_UUID(${binInput}, 1) as uuid;`;
-      setOutput(`-- SQL Function\n${sqlStatement}\n\n-- Usage example\nSELECT BIN_TO_UUID(id, 1) as uuid, name FROM users;`);
+      let binValue = binInput.trim();
+      
+      // Handle different formats
+      if (binValue.startsWith('0x')) {
+        binValue = binValue.substring(2); // Remove 0x prefix if present
+      }
+      
+      // Make sure it's a valid hex string
+      if (!/^[0-9a-f]+$/i.test(binValue)) {
+        toast({
+          title: "Invalid hex format",
+          description: "Please enter a valid hexadecimal value",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const tableName = "my_table";
+      const columnName = "binary_uuid";
+      
+      const sqlStatement = `-- Convert binary to UUID using BIN_TO_UUID
+SELECT BIN_TO_UUID(${columnName}, 1) as uuid
+FROM ${tableName}
+WHERE id = 1;`;
+      
+      const hexFormat = `-- Or using direct hex input
+SELECT BIN_TO_UUID(UNHEX('${binValue}'), 1) AS uuid;`;
+      
+      const selectWithJoin = `-- Example in JOIN query
+SELECT 
+  u.name, 
+  BIN_TO_UUID(u.id, 1) as user_uuid
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed';`;
+      
+      setOutput(`${sqlStatement}\n\n${hexFormat}\n\n${selectWithJoin}\n\n-- Full UUID value if conversion worked:
+-- xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`);
     } catch (error) {
       toast({
         title: "Conversion error",
@@ -112,9 +167,12 @@ const SqlHelper = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>SQL Helper</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <Binary className="h-5 w-5" />
+          <span>UUID/Binary Converter for MySQL</span>
+        </CardTitle>
         <CardDescription>
-          Convert between UUID and binary formats, format SQL queries
+          Convert between UUID and binary formats for efficient MySQL storage, format SQL queries
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -134,6 +192,9 @@ const SqlHelper = () => {
                 placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
                 className="font-mono text-sm"
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Enter a UUID in the standard format with dashes
+              </p>
             </div>
           </TabsContent>
 
@@ -143,9 +204,12 @@ const SqlHelper = () => {
               <Input 
                 value={binInput}
                 onChange={(e) => setBinInput(e.target.value)}
-                placeholder="0x or column name"
+                placeholder="0x123e4567e89b12d3a456426614174000"
                 className="font-mono text-sm"
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Enter a hex value with or without 0x prefix, or a MySQL column name
+              </p>
             </div>
           </TabsContent>
 
