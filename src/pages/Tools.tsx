@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight, Database, Code, Binary, Flutter } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Database, Code, Binary, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -172,7 +172,7 @@ const Tools = () => {
           >
             <TabsList className="w-full grid grid-cols-3 mb-4">
               <TabsTrigger value="flutter" className="flex items-center gap-2">
-                <Flutter className="h-4 w-4" />
+                <Smartphone className="h-4 w-4" />
                 <span>Flutter Tools</span>
               </TabsTrigger>
               <TabsTrigger value="backend" className="flex items-center gap-2">

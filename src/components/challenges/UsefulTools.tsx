@@ -46,13 +46,13 @@ const UsefulTools = () => {
             <CardTitle>
               {activeTool === 'regex' && 'Regular Expression Tester'}
               {activeTool === 'json' && 'JSON Formatter & Validator'}
-              {activeTool === 'base64' && 'Binary & Base64 Tools'}
+              {activeTool === 'base64' && 'UUID ↔ Binary Converter'}
               {activeTool === 'color' && 'Flutter Color Converter'}
             </CardTitle>
             <CardDescription>
               {activeTool === 'regex' && 'Test and debug regular expressions with real-time matching'}
               {activeTool === 'json' && 'Format, validate and beautify your JSON data'}
-              {activeTool === 'base64' && 'Encode/decode Base64 and convert UUIDs to binary format'}
+              {activeTool === 'base64' && 'Convert between UUID and binary formats for MySQL'}
               {activeTool === 'color' && 'Convert between HEX, RGB and Flutter MaterialColor'}
             </CardDescription>
           </CardHeader>
@@ -64,7 +64,7 @@ const UsefulTools = () => {
               <JsonFormatter />
             </TabsContent>
             <TabsContent value="base64" className="mt-0">
-              {activeTool === 'base64' ? <SqlHelper /> : <Base64Tool />}
+              <SqlHelper />
             </TabsContent>
             <TabsContent value="color" className="mt-0">
               <ColorConverter />

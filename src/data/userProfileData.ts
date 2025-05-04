@@ -263,18 +263,15 @@ class CounterModel extends ChangeNotifier {
 class CounterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<CounterModel>(
-      builder: (context, counter, child) {
-        return Column(
-          children: [
-            Text('Count: ${counter.count}'),
-            ElevatedButton(
-              onPressed: counter.increment,
-              child: Text('Increment'),
-            ),
-          ],
-        );
-      },
+    final counterModel = context.watch<CounterModel>();
+    return Column(
+      children: [
+        Text('Count: ${counterModel.count}'),
+        ElevatedButton(
+          onPressed: counterModel.increment,
+          child: Text('Increment'),
+        ),
+      ],
     );
   }
 }`
