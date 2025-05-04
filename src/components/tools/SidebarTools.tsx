@@ -13,24 +13,11 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Card } from '@/components/ui/card';
 import { 
-  Code, Database, Binary, Smartphone, Wrench, LayoutDashboard, 
-  ChevronRight, Lightbulb, LayoutList
+  Code, Database, Binary, Wrench, LayoutDashboard, 
+  Lightbulb, LayoutList
 } from 'lucide-react';
 
-// Import tool components
-import RegexTester from '@/components/tools/RegexTester';
-import JsonFormatter from '@/components/tools/JsonFormatter';
-import Base64Tool from '@/components/tools/Base64Tool';
-import ColorConverter from '@/components/tools/ColorConverter';
-import DateConverter from '@/components/tools/DateConverter';
-import UuidGenerator from '@/components/tools/UuidGenerator';
-import ApiTester from '@/components/tools/ApiTester';
-import BoilerplateGenerator from '@/components/tools/BoilerplateGenerator';
-import MarkdownConverter from '@/components/tools/MarkdownConverter';
-import SqlHelper from '@/components/tools/SqlHelper';
-import FlutterCodePreview from '@/components/tools/FlutterCodePreview';
 import { ToolContent } from './ToolContent';
 import { devTools } from '@/data/devTools';
 
@@ -51,7 +38,7 @@ export default function SidebarTools() {
   
   // Get categories with their icons
   const categories = [
-    { id: 'flutter', name: 'Flutter Dev', icon: Smartphone },
+    { id: 'flutter', name: 'Flutter Dev', icon: LayoutList },
     { id: 'frontend', name: 'Frontend', icon: LayoutDashboard },
     { id: 'backend', name: 'Backend', icon: Database },
     { id: 'utilities', name: 'Utilities', icon: Wrench },
@@ -63,8 +50,8 @@ export default function SidebarTools() {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-full min-h-screen w-full bg-background">
-        <Sidebar>
-          <SidebarContent className="pt-6">
+        <Sidebar className="border-r">
+          <SidebarContent className="pt-16">
             {categories.map((category) => (
               <SidebarGroup key={category.id}>
                 <SidebarGroupLabel>
@@ -97,8 +84,8 @@ export default function SidebarTools() {
           </SidebarContent>
         </Sidebar>
 
-        <SidebarInset className="px-4 md:px-8 py-6 overflow-auto">
-          <div className="flex items-center pb-6 border-b">
+        <SidebarInset className="px-4 md:px-8 py-6 overflow-auto flex-1">
+          <div className="flex items-center pb-6 border-b pt-10">
             <SidebarTrigger className="mr-4" />
             <div>
               <h1 className="text-2xl font-bold">{activeTool?.name || 'Developer Tools'}</h1>
@@ -106,7 +93,7 @@ export default function SidebarTools() {
             </div>
           </div>
           
-          <div className="mt-8">
+          <div className="mt-8 mb-8">
             {activeTool && <ToolContent tool={activeTool} />}
           </div>
         </SidebarInset>

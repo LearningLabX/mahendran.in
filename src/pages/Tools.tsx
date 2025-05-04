@@ -13,7 +13,9 @@ const Tools = () => {
         />
       </Helmet>
 
-      <SidebarTools />
+      <div className="min-h-screen">
+        <SidebarTools />
+      </div>
     </>
   );
 };

@@ -1,3 +1,4 @@
+
 export const userProfileData = {
   user: {
     username: 'flutter_master',
@@ -262,12 +263,12 @@ class CounterModel extends ChangeNotifier {
 class CounterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = context.watch<CounterModel>();
+    final counterModel = context.watch<CounterModel>();
     return Column(
       children: [
-        Text('Count: ${counter.count}'),
+        Text('Count: ${counterModel.count}'),
         ElevatedButton(
-          onPressed: counter.increment,
+          onPressed: counterModel.increment,
           child: Text('Increment'),
         ),
       ],

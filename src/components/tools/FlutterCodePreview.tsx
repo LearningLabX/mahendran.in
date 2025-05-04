@@ -6,9 +6,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Check, Share2 } from 'lucide-react';
+import { Copy, Check, Share2, Code } from 'lucide-react';
 
 const FlutterCodePreview = () => {
   const [code, setCode] = useState(`import 'package:flutter/material.dart';
@@ -64,6 +64,7 @@ class MyHomePage extends StatelessWidget {
   const [theme, setTheme] = useState('light');
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('code');
+  const { toast } = useToast();
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(code);
@@ -141,6 +142,47 @@ class MyHomePage extends StatelessWidget {
     setCode(currentCode => currentCode + '\n\n// New widget\n' + snippet);
   };
 
+  // Simplified preview renderer
+  const renderPreview = () => {
+    // Extract component name from code
+    const componentNameMatch = code.match(/class\s+(\w+)\s+extends\s+StatelessWidget|StatefulWidget/);
+    const componentName = componentNameMatch ? componentNameMatch[1] : 'Flutter Component';
+    
+    // Extract colors from code for preview
+    const primaryColorMatch = code.match(/color:\s*Colors\.(\w+)/);
+    const primaryColor = primaryColorMatch ? primaryColorMatch[1] : 'blue';
+    
+    // Extract text from code for preview
+    const textMatch = code.match(/'([^']+)'/);
+    const previewText = textMatch ? textMatch[1] : 'Hello Flutter!';
+    
+    return (
+      <div className={`w-full h-[400px] flex items-center justify-center ${theme === 'dark' ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
+        <div className="text-center p-4">
+          <div className={`bg-${primaryColor}-500 text-white p-4 rounded-lg shadow-lg mb-4`}>
+            <p className="font-bold text-lg">{componentName}</p>
+            <div className="p-3 mt-2 bg-white bg-opacity-10 rounded">
+              <p>{previewText}</p>
+            </div>
+          </div>
+          <div className={`mt-4 p-4 border rounded-md ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="flex items-center justify-center space-x-4">
+              <div className={`w-12 h-12 rounded-full bg-${primaryColor}-500 flex items-center justify-center`}>
+                <Code className="h-6 w-6 text-white" />
+              </div>
+              <div className={`w-12 h-12 rounded-full border-2 border-${primaryColor}-500 flex items-center justify-center`}>
+                <Code className={`h-6 w-6 text-${primaryColor}-500`} />
+              </div>
+            </div>
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">
+            This is a visual representation of your Flutter code.
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 justify-between items-center">
@@ -204,19 +246,7 @@ class MyHomePage extends StatelessWidget {
         <TabsContent value="preview" className="p-0 mt-2">
           <Card className="border">
             <CardContent className="p-0">
-              <div className={`w-full h-[400px] flex items-center justify-center ${theme === 'dark' ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
-                <div className="text-center p-4">
-                  <p className="mb-4">Flutter Preview</p>
-                  <Card className="inline-block">
-                    <CardContent className="p-4">
-                      <p className="text-blue-500 font-bold text-lg">Hello Flutter!</p>
-                    </CardContent>
-                  </Card>
-                  <p className="mt-4 text-sm text-muted-foreground">
-                    This is a mockup preview. In a real implementation, this would render your Flutter code.
-                  </p>
-                </div>
-              </div>
+              {renderPreview()}
             </CardContent>
           </Card>
         </TabsContent>
