@@ -10,7 +10,7 @@ import UsefulTools from '@/components/challenges/UsefulTools';
 import LearnSection from '@/components/challenges/LearnSection';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Star, Trophy, User, Zap, Tool, Bulb } from 'lucide-react';
+import { Star, Trophy, User, Zap, Wrench, Lightbulb } from 'lucide-react';
 
 const DevDailyChallenge = () => {
   const [activeTab, setActiveTab] = useState('challenges');
@@ -62,11 +62,11 @@ const DevDailyChallenge = () => {
                   <span>Profile</span>
                 </TabsTrigger>
                 <TabsTrigger value="tools" className="h-12 flex gap-2 px-4">
-                  <Tool className="h-4 w-4" />
+                  <Wrench className="h-4 w-4" />
                   <span>Useful Tools</span>
                 </TabsTrigger>
                 <TabsTrigger value="learn" className="h-12 flex gap-2 px-4">
-                  <Bulb className="h-4 w-4" />
+                  <Lightbulb className="h-4 w-4" />
                   <span>Learn</span>
                 </TabsTrigger>
               </TabsList>
