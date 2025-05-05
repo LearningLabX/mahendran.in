@@ -1,277 +1,329 @@
+// Define the user profile data structure with necessary types
 
-export const userProfileData = {
+// Type definitions
+interface User {
+  username: string;
+  avatar: string;
+  bio: string;
+  xp: number;
+  streak: number;
+  challengesSolved: number;
+  joinDate: string;
+}
+
+interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  unlocked: boolean;
+  xpReward: number;
+}
+
+interface Challenge {
+  id: string;
+  title: string;
+  tags: string[];
+  xpEarned: number;
+  completedDate: string;
+  solution: string;
+}
+
+interface UserProfileData {
+  user: User;
+  achievements: Achievement[];
+  solvedChallenges: Challenge[];
+}
+
+// Create the userProfileData object
+export const userProfileData: UserProfileData = {
   user: {
-    username: 'flutter_master',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    bio: 'Flutter developer with 3+ years of experience. Love creating beautiful UI and solving complex problems.',
-    xp: 1240,
-    streak: 7,
-    challengesSolved: 42,
-    joinDate: 'Apr 12, 2023',
+    username: 'DevMaster',
+    avatar: 'https://api.dicebear.com/6.x/avataaars/svg?seed=Felix',
+    bio: 'Mobile app developer | Flutter enthusiast | Open source contributor',
+    xp: 1250,
+    streak: 14,
+    challengesSolved: 32,
+    joinDate: 'May 2024',
   },
   achievements: [
     {
       id: 'a1',
-      name: '7-Day Streak',
-      description: 'Completed challenges for 7 days in a row',
+      name: 'First Steps',
+      description: 'Complete your first challenge',
+      emoji: '🚀',
+      unlocked: true,
+      xpReward: 50,
+    },
+    {
+      id: 'a2',
+      name: 'On Fire',
+      description: 'Maintain a 7-day streak',
       emoji: '🔥',
       unlocked: true,
       xpReward: 100,
     },
     {
-      id: 'a2',
-      name: 'First 1000 XP',
-      description: 'Earned your first 1000 XP',
-      emoji: '🌟',
-      unlocked: true,
-      xpReward: 150,
-    },
-    {
       id: 'a3',
-      name: 'UI Wizard',
-      description: 'Completed 10 UI challenges',
-      emoji: '🧙',
+      name: 'Flutter Expert',
+      description: 'Complete all Flutter challenges',
+      emoji: '💪',
       unlocked: true,
       xpReward: 200,
     },
     {
       id: 'a4',
-      name: 'Bug Hunter',
-      description: 'Fixed 5 debugging challenges',
-      emoji: '🔍',
-      unlocked: true,
-      xpReward: 100,
-    },
-    {
-      id: 'a5',
-      name: 'Algorithm Master',
-      description: 'Solved 10 algorithm challenges',
-      emoji: '🧠',
+      name: 'Code Ninja',
+      description: 'Solve 50 challenges',
+      emoji: '🥷',
       unlocked: false,
       xpReward: 300,
     },
     {
+      id: 'a5',
+      name: 'Perfect Solution',
+      description: 'Get a perfect score on a hard challenge',
+      emoji: '⭐',
+      unlocked: true,
+      xpReward: 150,
+    },
+    {
       id: 'a6',
-      name: '30-Day Streak',
-      description: 'Completed challenges for 30 days in a row',
-      emoji: '📅',
+      name: 'Early Bird',
+      description: 'Complete a challenge within 1 hour of posting',
+      emoji: '🐦',
       unlocked: false,
-      xpReward: 500,
+      xpReward: 100,
     },
   ],
   solvedChallenges: [
     {
       id: 'c1',
-      title: 'Design a Bottom Navigation Bar',
-      tags: ['Flutter', 'UI'],
-      xpEarned: 50,
-      completedDate: 'May 3, 2023',
-      solution: `class CustomBottomNav extends StatefulWidget {
-  @override
-  _CustomBottomNavState createState() => _CustomBottomNavState();
+      title: 'Flutter Navigation Bar Implementation',
+      tags: ['Flutter', 'UI', 'Navigation'],
+      xpEarned: 75,
+      completedDate: 'May 2, 2025',
+      solution: `import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
 }
 
-class _CustomBottomNavState extends State<CustomBottomNav> {
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Navigation Bar Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   
+  final List<Widget> _pages = [
+    Center(child: Text('Home')),
+    Center(child: Text('Search')),
+    Center(child: Text('Profile')),
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Colors.grey,
-      items: [
-        BottomNavigationBarItem(
-          icon: _buildIcon(0, Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: _buildIcon(1, Icons.search),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: _buildIcon(2, Icons.favorite),
-          label: 'Favorites',
-        ),
-        BottomNavigationBarItem(
-          icon: _buildIcon(3, Icons.person),
-          label: 'Profile',
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildIcon(int index, IconData icon) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: _selectedIndex == index ? Theme.of(context).primaryColor.withOpacity(0.2) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Navigation Demo'),
       ),
-      child: Icon(icon),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }`,
     },
     {
       id: 'c2',
-      title: 'Parse JSON Response',
-      tags: ['Dart', 'Logic'],
-      xpEarned: 75,
-      completedDate: 'May 2, 2023',
-      solution: `class Post {
-  final int id;
-  final String title;
-  
-  Post({required this.id, required this.title});
-  
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      id: json['id'],
-      title: json['title'],
-    );
-  }
+      title: 'State Management with Provider',
+      tags: ['Flutter', 'Provider', 'State Management'],
+      xpEarned: 100,
+      completedDate: 'Apr 28, 2025',
+      solution: `import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Counter(),
+      child: MyApp(),
+    ),
+  );
 }
 
-class Preferences {
-  final String theme;
-  final bool notifications;
-  
-  Preferences({required this.theme, required this.notifications});
-  
-  factory Preferences.fromJson(Map<String, dynamic> json) {
-    return Preferences(
-      theme: json['theme'],
-      notifications: json['notifications'],
-    );
-  }
-}
-
-class User {
-  final int id;
-  final String name;
-  final String email;
-  final Preferences preferences;
-  final List<Post> posts;
-  
-  User({
-    required this.id, 
-    required this.name, 
-    required this.email, 
-    required this.preferences, 
-    required this.posts,
-  });
-  
-  factory User.fromJson(Map<String, dynamic> json) {
-    var userJson = json['user'];
-    
-    var postsList = userJson['posts'] as List;
-    List<Post> posts = postsList.map((item) => Post.fromJson(item)).toList();
-    
-    return User(
-      id: userJson['id'],
-      name: userJson['name'],
-      email: userJson['email'],
-      preferences: Preferences.fromJson(userJson['preferences']),
-      posts: posts,
-    );
-  }
-}`,
-    },
-    {
-      id: 'c5',
-      title: 'Create an Extension Method',
-      tags: ['Dart', 'Logic'],
-      xpEarned: 40,
-      completedDate: 'May 1, 2023',
-      solution: `extension StringHelpers on String {
-  String capitalize() {
-    if (isEmpty) return this;
-    return this[0].toUpperCase() + this.substring(1);
-  }
-  
-  String truncate(int maxLength, {String suffix = '...'}) {
-    if (length <= maxLength) return this;
-    return substring(0, maxLength) + suffix;
-  }
-  
-  String toSlug() {
-    return toLowerCase()
-      .replaceAll(' ', '-')
-      .replaceAll(RegExp(r'[^\w-]'), '');
-  }
-}`,
-    },
-    {
-      id: 'c6',
-      title: 'Convert Stateful to Stateless',
-      tags: ['Flutter', 'Architecture'],
-      xpEarned: 65,
-      completedDate: 'Apr 30, 2023',
-      solution: `// Before:
-class CounterWidget extends StatefulWidget {
-  @override
-  _CounterWidgetState createState() => _CounterWidgetState();
-}
-
-class _CounterWidgetState extends State<CounterWidget> {
-  int _count = 0;
-  
-  void _increment() {
-    setState(() {
-      _count++;
-    });
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Count: $_count'),
-        ElevatedButton(
-          onPressed: _increment,
-          child: Text('Increment'),
-        ),
-      ],
-    );
-  }
-}
-
-// After (with Provider):
-class CounterModel extends ChangeNotifier {
+class Counter with ChangeNotifier {
   int _count = 0;
   int get count => _count;
-  
+
   void increment() {
     _count++;
     notifyListeners();
   }
 }
 
-// Register in main.dart
-// ChangeNotifierProvider(create: (_) => CounterModel()),
-
-class CounterWidget extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = context.watch<CounterModel>();
-    return Column(
-      children: [
-        Text('Count: {counter.count}'),
-        ElevatedButton(
-          onPressed: counter.increment,
-          child: Text('Increment'),
+    return MaterialApp(
+      title: 'Provider Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Provider Demo'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('You have pushed the button this many times:'),
+            Consumer<Counter>(
+              builder: (context, counter, child) => Text(
+                '\${counter.count}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Provider.of<Counter>(context, listen: false).increment(),
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}`,
+    },
+    {
+      id: 'c3',
+      title: 'Animated List Implementation',
+      tags: ['Flutter', 'Animation', 'UI'],
+      xpEarned: 85,
+      completedDate: 'Apr 20, 2025',
+      solution: `import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Animated List Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: AnimatedListSample(),
+    );
+  }
+}
+
+class AnimatedListSample extends StatefulWidget {
+  @override
+  _AnimatedListSampleState createState() => _AnimatedListSampleState();
+}
+
+class _AnimatedListSampleState extends State<AnimatedListSample> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  final List<String> _items = ['Item 1', 'Item 2', 'Item 3'];
+  
+  void _addItem() {
+    final int newIndex = _items.length;
+    _items.add('Item \${newIndex + 1}');
+    _listKey.currentState!.insertItem(newIndex);
+  }
+
+  void _removeItem(int index) {
+    final String removedItem = _items[index];
+    _items.removeAt(index);
+    _listKey.currentState!.removeItem(
+      index,
+      (context, animation) => _buildItem(removedItem, animation),
+    );
+  }
+
+  Widget _buildItem(String item, Animation<double> animation) {
+    return SizeTransition(
+      sizeFactor: animation,
+      child: Card(
+        margin: EdgeInsets.all(10),
+        elevation: 5,
+        child: ListTile(
+          title: Text(item),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _removeItem(_items.indexOf(item)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Animated List'),
+      ),
+      body: AnimatedList(
+        key: _listKey,
+        initialItemCount: _items.length,
+        itemBuilder: (context, index, animation) {
+          return _buildItem(_items[index], animation);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addItem,
+        tooltip: 'Add Item',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }`,

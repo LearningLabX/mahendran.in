@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { DevTool } from '@/data/devTools';
 
 // Import tool components
@@ -23,7 +23,7 @@ import HttpStatusCodes from '@/components/tools/HttpStatusCodes';
 // Define a mapping between tool IDs and their components
 const toolComponents: Record<string, React.ComponentType> = {
   'regex': RegexTester,
-  'json': JsonFormatterTool,
+  'json': JsonFormatter,
   'base64': Base64Tool,
   'color': ColorConverter,
   'date': DateConverter,
@@ -49,33 +49,25 @@ export const ToolContent: React.FC<ToolContentProps> = ({ tool }) => {
   
   if (!ToolComponent) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Coming Soon</CardTitle>
-          <CardDescription>This tool is currently under development.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>We're working hard to bring you this developer tool. Check back soon for updates!</p>
+      <Card className="shadow-sm border-slate-200 dark:border-slate-800">
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="rounded-full bg-slate-100 dark:bg-slate-800 p-3 mb-4">
+              <tool.icon className="h-6 w-6 text-slate-500 dark:text-slate-400" />
+            </div>
+            <h3 className="text-xl font-medium mb-2">Tool Coming Soon</h3>
+            <p className="text-slate-600 dark:text-slate-400 max-w-md">
+              We're working hard to bring you this developer tool. Check back soon for updates!
+            </p>
+          </div>
         </CardContent>
       </Card>
     );
   }
   
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <tool.icon className="h-5 w-5" />
-          {tool.name}
-          {tool.isPro && (
-            <span className="ml-2 text-xs font-semibold bg-primary/20 text-primary px-2 py-0.5 rounded">
-              PRO
-            </span>
-          )}
-        </CardTitle>
-        <CardDescription>{tool.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <Card className="shadow-sm border-slate-200 dark:border-slate-800">
+      <CardContent className="p-4 md:p-6">
         <ToolComponent />
       </CardContent>
     </Card>

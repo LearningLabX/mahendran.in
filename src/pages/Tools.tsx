@@ -1,6 +1,8 @@
 
 import { Helmet } from 'react-helmet';
-import SidebarTools from '@/components/tools/SidebarTools';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { ToolsSidebar } from '@/components/tools/ToolsSidebar';
+import { ToolsContent } from '@/components/tools/ToolsContent';
 
 const Tools = () => {
   return (
@@ -13,8 +15,13 @@ const Tools = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen pt-16">
-        <SidebarTools />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pt-16">
+        <SidebarProvider defaultOpen={true}>
+          <div className="w-full h-full flex">
+            <ToolsSidebar />
+            <ToolsContent />
+          </div>
+        </SidebarProvider>
       </div>
     </>
   );

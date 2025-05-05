@@ -1,20 +1,7 @@
-import {
-  Code,
-  Database,
-  Binary,
-  Smartphone,
-  Wrench,
-  LayoutDashboard,
-  Lightbulb,
-  LayoutList,
-  FileJson,
-  FileSearch,
-  // Http,
-  FileCode,
-  FileCheck,
-  FileText,
-  FileArchive,
-  FileX,
+import { 
+  Code, Database, Binary, Smartphone, Wrench, LayoutDashboard, 
+  Lightbulb, LayoutList, FileJson, FileSearch, FileCode, 
+  FileCheck, FileText, FileArchive, FileX, SquareCode
 } from 'lucide-react';
 
 export interface DevTool {
@@ -219,7 +206,7 @@ export const devTools: DevTool[] = [
     name: 'HTTP Status Codes',
     description: 'Reference for HTTP status codes and their meanings',
     category: 'utilities',
-    icon: LayoutList,
+    icon: FileCode,
     isNew: true,
     tags: ['HTTP', 'Status Codes', 'API'],
   },
