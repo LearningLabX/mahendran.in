@@ -59,7 +59,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Helmet>
-            <title>Mahendran | Mobile App Development Expert</title>
+            <title>Mahendran | Mobile App Development</title>
             <meta
               name="description"
               content="Mobile app development blog, tutorials and resources for Flutter, React Native, Android and iOS developers."
