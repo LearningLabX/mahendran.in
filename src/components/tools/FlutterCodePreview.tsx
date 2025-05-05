@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -248,10 +247,10 @@ class MyHomePage extends StatelessWidget {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2 justify-between items-center">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
           <Select onValueChange={insertTemplate} defaultValue="templates">
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Insert Template" />
             </SelectTrigger>
             <SelectContent>
@@ -263,8 +262,8 @@ class MyHomePage extends StatelessWidget {
             </SelectContent>
           </Select>
           
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="theme-mode">Dark Theme</Label>
+          <div className="flex items-center space-x-2 mt-3 sm:mt-0">
+            <Label htmlFor="theme-mode" className="whitespace-nowrap">Dark Theme</Label>
             <Switch 
               id="theme-mode"
               checked={theme === 'dark'}
@@ -273,7 +272,7 @@ class MyHomePage extends StatelessWidget {
           </div>
         </div>
         
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
           <Button 
             variant="secondary" 
             size="sm"
