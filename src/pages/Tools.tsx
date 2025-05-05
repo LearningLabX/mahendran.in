@@ -13,7 +13,7 @@ const Tools = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen pt-16">
+      <div className="min-h-screen">
         <SidebarTools />
       </div>
     </>
