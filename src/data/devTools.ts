@@ -1,8 +1,20 @@
-
-import { 
-  Code, Database, Binary, Smartphone, Wrench, LayoutDashboard, 
-  Lightbulb, LayoutList, FileJson, FileSearch, Http, FileCode, 
-  FileCheck, FileText, FileArchive, FileX
+import {
+  Code,
+  Database,
+  Binary,
+  Smartphone,
+  Wrench,
+  LayoutDashboard,
+  Lightbulb,
+  LayoutList,
+  FileJson,
+  FileSearch,
+  // Http,
+  FileCode,
+  FileCheck,
+  FileText,
+  FileArchive,
+  FileX,
 } from 'lucide-react';
 
 export interface DevTool {
@@ -63,7 +75,7 @@ export const devTools: DevTool[] = [
     isPro: true,
     tags: ['Flutter', 'Theme', 'UI'],
   },
-  
+
   // Frontend Tools
   {
     id: 'html-to-flutter',
@@ -98,7 +110,7 @@ export const devTools: DevTool[] = [
     icon: FileText,
     tags: ['Markdown', 'HTML', 'Preview'],
   },
-  
+
   // Backend Tools
   {
     id: 'sql',
@@ -159,7 +171,7 @@ export const devTools: DevTool[] = [
     isPro: true,
     tags: ['GraphQL', 'API', 'Query'],
   },
-  
+
   // Utilities
   {
     id: 'regex',
@@ -207,7 +219,7 @@ export const devTools: DevTool[] = [
     name: 'HTTP Status Codes',
     description: 'Reference for HTTP status codes and their meanings',
     category: 'utilities',
-    icon: Http,
+    icon: LayoutList,
     isNew: true,
     tags: ['HTTP', 'Status Codes', 'API'],
   },
@@ -247,7 +259,7 @@ export const devTools: DevTool[] = [
     isPro: true,
     tags: ['SVG', 'Optimization', 'Design'],
   },
-  
+
   // AI Tools
   {
     id: 'ui-to-code',
@@ -277,7 +289,7 @@ export const devTools: DevTool[] = [
     isPro: true,
     tags: ['AI', 'Git', 'Commit'],
   },
-  
+
   // Other Tools
   {
     id: 'boilerplate',
