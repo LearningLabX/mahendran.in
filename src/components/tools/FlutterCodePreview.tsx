@@ -66,12 +66,14 @@ class MyHomePage extends StatelessWidget {
   const [activeTab, setActiveTab] = useState('code');
   const { toast } = useToast();
   const [isRendering, setIsRendering] = useState(false);
-  const [parsedCode, setParsedCode] = useState(code);
+  const [parsedCode, setParsedCode] = useState('');
 
-  // Effect to update preview when code changes
+  // Update preview when code changes
   useEffect(() => {
-    setParsedCode(code);
-  }, [code]);
+    if (activeTab === 'preview') {
+      handlePreviewClick();
+    }
+  }, [code, activeTab]);
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(code);

@@ -23,7 +23,7 @@ import HttpStatusCodes from '@/components/tools/HttpStatusCodes';
 // Define a mapping between tool IDs and their components
 const toolComponents: Record<string, React.ComponentType> = {
   'regex': RegexTester,
-  'json': JsonFormatterTool,
+  'json': JsonFormatter,
   'base64': Base64Tool,
   'color': ColorConverter,
   'date': DateConverter,

@@ -13,10 +13,13 @@ import {
   SidebarInset,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { 
-  Code, Database, Binary, Wrench, LayoutDashboard, 
-  Lightbulb, LayoutList, Smartphone
-} from 'lucide-react';
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 import { ToolContent } from './ToolContent';
 import { devTools } from '@/data/devTools';
@@ -38,13 +41,13 @@ export default function SidebarTools() {
   
   // Get categories with their icons
   const categories = [
-    { id: 'flutter', name: 'Flutter Dev', icon: LayoutList },
-    { id: 'frontend', name: 'Frontend', icon: LayoutDashboard },
-    { id: 'backend', name: 'Backend', icon: Database },
-    { id: 'utilities', name: 'Utilities', icon: Wrench },
-    { id: 'design', name: 'Design', icon: LayoutList },
-    { id: 'ai', name: 'AI Tools', icon: Lightbulb },
-    { id: 'other', name: 'Other', icon: Code }
+    { id: 'flutter', name: 'Flutter Dev', icon: 'Smartphone' },
+    { id: 'frontend', name: 'Frontend', icon: 'LayoutDashboard' },
+    { id: 'backend', name: 'Backend', icon: 'Database' },
+    { id: 'utilities', name: 'Utilities', icon: 'Wrench' },
+    { id: 'design', name: 'Design', icon: 'LayoutList' },
+    { id: 'ai', name: 'AI Tools', icon: 'Lightbulb' },
+    { id: 'other', name: 'Other', icon: 'Code' }
   ];
 
   return (
@@ -52,45 +55,48 @@ export default function SidebarTools() {
       <div className="flex h-full min-h-screen w-full">
         <Sidebar className="border-r">
           <SidebarContent>
-            {categories.map((category) => {
-              const categoryTools = toolsByCategory[category.id] || [];
-              
-              return (
-                <SidebarGroup key={category.id}>
-                  <SidebarGroupLabel>
-                    <category.icon className="mr-2 h-4 w-4" />
-                    <span>{category.name}</span>
-                    <span className="ml-auto text-xs text-muted-foreground">{categoryTools.length}</span>
-                  </SidebarGroupLabel>
-                  <SidebarGroupContent>
-                    <SidebarMenu>
-                      {categoryTools.map((tool) => (
-                        <SidebarMenuItem key={tool.id}>
-                          <SidebarMenuButton 
-                            isActive={activeToolId === tool.id}
-                            onClick={() => setActiveToolId(tool.id)}
-                            tooltip={tool.tooltip || tool.name}
-                          >
-                            <tool.icon className="h-4 w-4" />
-                            <span>{tool.name}</span>
-                            {tool.isPro && (
-                              <span className="ml-auto text-xs font-semibold bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm">
-                                PRO
-                              </span>
-                            )}
-                            {tool.isNew && !tool.isPro && (
-                              <span className="ml-auto text-xs font-semibold bg-green-500/20 text-green-600 px-1.5 py-0.5 rounded-sm">
-                                NEW
-                              </span>
-                            )}
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-              );
-            })}
+            <Accordion type="multiple" defaultValue={['flutter']}>
+              {categories.map((category) => {
+                const categoryTools = toolsByCategory[category.id] || [];
+                
+                return (
+                  <AccordionItem key={category.id} value={category.id}>
+                    <AccordionTrigger className="py-2 px-2">
+                      <div className="flex items-center">
+                        <span>{category.name}</span>
+                        <span className="ml-auto text-xs text-muted-foreground">{categoryTools.length}</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <SidebarMenu>
+                        {categoryTools.map((tool) => (
+                          <SidebarMenuItem key={tool.id}>
+                            <SidebarMenuButton 
+                              isActive={activeToolId === tool.id}
+                              onClick={() => setActiveToolId(tool.id)}
+                              tooltip={tool.tooltip || tool.name}
+                            >
+                              <tool.icon className="h-4 w-4" />
+                              <span>{tool.name}</span>
+                              {tool.isPro && (
+                                <span className="ml-auto text-xs font-semibold bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm">
+                                  PRO
+                                </span>
+                              )}
+                              {tool.isNew && !tool.isPro && (
+                                <span className="ml-auto text-xs font-semibold bg-green-500/20 text-green-600 px-1.5 py-0.5 rounded-sm">
+                                  NEW
+                                </span>
+                              )}
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                      </SidebarMenu>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
           </SidebarContent>
         </Sidebar>
 
