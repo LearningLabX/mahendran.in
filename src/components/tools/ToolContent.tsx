@@ -49,26 +49,26 @@ export const ToolContent: React.FC<ToolContentProps> = ({ tool }) => {
   
   if (!ToolComponent) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Coming Soon</CardTitle>
+      <Card className="shadow-sm border-slate-200 dark:border-slate-800">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-xl">Tool Coming Soon</CardTitle>
           <CardDescription>This tool is currently under development.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>We're working hard to bring you this developer tool. Check back soon for updates!</p>
+          <p className="text-slate-700 dark:text-slate-300">We're working hard to bring you this developer tool. Check back soon for updates!</p>
         </CardContent>
       </Card>
     );
   }
   
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <tool.icon className="h-5 w-5" />
+    <Card className="shadow-sm border-slate-200 dark:border-slate-800">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <tool.icon className="h-5 w-5 text-blue-500 dark:text-blue-400" />
           {tool.name}
           {tool.isPro && (
-            <span className="ml-2 text-xs font-semibold bg-primary/20 text-primary px-2 py-0.5 rounded">
+            <span className="ml-2 text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-500 text-white px-2 py-0.5 rounded">
               PRO
             </span>
           )}
