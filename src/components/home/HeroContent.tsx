@@ -83,11 +83,11 @@ export default function HeroContent() {
           className="relative md:flex-1 flex justify-center"
         >
           <div className="relative">
-            <Avatar className="w-64 h-64 md:w-80 md:h-80 border-4 border-primary/20 shadow-xl">
+            <Avatar className="w-64 h-64 md:w-80 md:h-80 border-4 border-primary/20 shadow-xl overflow-hidden">
               <AvatarImage
-                src="https://media.licdn.com/dms/image/v2/D5603AQFOQ6Nyy6i4cA/profile-displayphoto-shrink_800_800/B56ZZZUHzFGcAg-/0/1745255171267?e=1750896000&v=beta&t=2qr9wsOKKilDCrZrTDJZc_DRExReR2GP5wp3ToSf360"
+                src="/mahe.jpg"
                 alt="Mobile Developer"
-                className="object-cover"
+                className="w-full h-full object-cover"
               />
               <AvatarFallback>mahendran profile</AvatarFallback>
             </Avatar>

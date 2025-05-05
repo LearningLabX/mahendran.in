@@ -1,7 +1,8 @@
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import { trackFormSubmission } from '@/lib/analytics';
+import { pushData } from '@/lib/realtimeDb';
 
 type FormData = {
   name: string;
@@ -12,9 +13,9 @@ type FormData = {
 export default function ContactForm() {
   const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    message: "",
+    name: '',
+    email: '',
+    message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,25 +29,41 @@ export default function ContactForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Save contact form submission to Firebase Realtime Database
+      const contactId = await pushData('contact_submissions', {
+        ...formData,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Track form submission event
+      trackFormSubmission('contact_form');
+
       toast({
-        title: "Message sent!",
+        title: 'Message sent!',
         description: "Thank you for your message. I'll respond soon.",
       });
-      
+
       setFormData({
-        name: "",
-        email: "",
-        message: "",
+        name: '',
+        email: '',
+        message: '',
       });
-      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: 'Error',
+        description:
+          'There was a problem sending your message. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -99,11 +116,7 @@ export default function ContactForm() {
         ></textarea>
       </div>
 
-      <Button 
-        type="submit" 
-        className="w-full"
-        disabled={isSubmitting}
-      >
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (
           <>
             <span className="animate-loader mr-2 h-4 w-4 border-2 border-current border-r-transparent rounded-full inline-block"></span>
