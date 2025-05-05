@@ -13,8 +13,10 @@ const Tools = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen">
-        <SidebarTools />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pt-16">
+        <div className="container mx-auto">
+          <SidebarTools />
+        </div>
       </div>
     </>
   );
