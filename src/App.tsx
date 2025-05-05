@@ -35,8 +35,8 @@ const App = () => {
               <main className="min-h-screen">
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/resume" element={<Resume />} />
+                  {/* <Route path="/projects" element={<Projects />} /> */}
+                  {/* <Route path="/resume" element={<Resume />} /> */}
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:blogId" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
