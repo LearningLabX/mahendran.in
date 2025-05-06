@@ -1,4 +1,3 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
@@ -7,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import blogData from '@/data/blogPosts.json';
 import { BlogPost as BlogPostType } from '@/hooks/useBlogPosts';
+import ReactMarkdown from 'react-markdown';
 import { trackBlogView, trackEvent } from '@/lib/analytics';
 import { useGoogleAdsense } from '@/hooks/useGoogleAdsense';
 
@@ -18,16 +18,16 @@ const BlogPost = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     if (blogId) {
       // Track blog post view for analytics
       trackBlogView(blogId, post?.title || 'Unknown Post');
-      
+
       // Track additional engagement metrics
       trackEvent('blog_post_engagement', {
         blog_id: blogId,
         source: document.referrer || 'direct',
-        screen_size: `${window.innerWidth}x${window.innerHeight}`
+        screen_size: `${window.innerWidth}x${window.innerHeight}`,
       });
     }
   }, [blogId, post?.title]);
@@ -55,9 +55,7 @@ const BlogPost = () => {
           data-ad-client="ca-pub-5354730220539777"
           data-ad-slot="3479208831"
         ></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     );
   };
@@ -89,6 +87,104 @@ const BlogPost = () => {
       </div>
     );
   }
+
+  // Function to properly parse markdown in content
+  const renderContent = () => {
+    return (
+      <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
+        {post.content.map((paragraph, index) => {
+          // Handle code blocks separately
+          if (paragraph.startsWith('```')) {
+            const lines = paragraph.split('\n');
+            const language = lines[0].replace('```', '').trim();
+            const code = lines.slice(1, -1).join('\n');
+
+            return (
+              <div
+                key={index}
+                className="my-6 overflow-auto rounded-lg bg-secondary/50 p-4"
+              >
+                <pre>
+                  <code className={language ? `language-${language}` : ''}>
+                    {code}
+                  </code>
+                </pre>
+              </div>
+            );
+          }
+          // Use ReactMarkdown for all other content
+          else {
+            return (
+              <div key={index} className="mb-6">
+                <ReactMarkdown
+                  components={{
+                    h2: ({ node, ...props }) => (
+                      <h2
+                        className="text-2xl font-bold mt-10 mb-4"
+                        {...props}
+                      />
+                    ),
+                    strong: ({ node, ...props }) => (
+                      <strong className="font-bold" {...props} />
+                    ),
+                    em: ({ node, ...props }) => (
+                      <em className="italic" {...props} />
+                    ),
+                    ul: ({ node, ...props }) => (
+                      <ul className="list-disc pl-6 mb-6" {...props} />
+                    ),
+                    ol: ({ node, ...props }) => (
+                      <ol className="list-decimal pl-6 mb-6" {...props} />
+                    ),
+                    li: ({ node, ...props }) => (
+                      <li className="mb-1" {...props} />
+                    ),
+                    a: ({ node, ...props }) => (
+                      <a className="text-primary hover:underline" {...props} />
+                    ),
+                    table: ({ node, ...props }) => (
+                      <div className="overflow-x-auto mb-6">
+                        <table
+                          className="min-w-full divide-y divide-gray-300"
+                          {...props}
+                        />
+                      </div>
+                    ),
+                    thead: ({ node, ...props }) => (
+                      <thead className="bg-secondary/30" {...props} />
+                    ),
+                    th: ({ node, ...props }) => (
+                      <th
+                        className="px-4 py-3 text-left text-sm font-semibold"
+                        {...props}
+                      />
+                    ),
+                    td: ({ node, ...props }) => (
+                      <td className="px-4 py-3 text-sm" {...props} />
+                    ),
+                    tr: ({ node, ...props }) => (
+                      <tr className="border-b" {...props} />
+                    ),
+                    img: ({ node, ...props }) => (
+                      <img className="rounded-lg w-full my-6" {...props} />
+                    ),
+                    blockquote: ({ node, ...props }) => (
+                      <blockquote
+                        className="border-l-4 border-primary/30 pl-4 italic my-6"
+                        {...props}
+                      />
+                    ),
+                  }}
+                >
+                  {paragraph}
+                </ReactMarkdown>
+              </div>
+            );
+          }
+        })}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -134,9 +230,9 @@ const BlogPost = () => {
                 <p className="text-sm font-medium">
                   {post.author || 'Mahendran'}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                {/* <p className="text-xs text-muted-foreground">
                   Mobile App Developer
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -152,67 +248,7 @@ const BlogPost = () => {
           </div>
         </AnimatedSection>
 
-        {/* First ad after title and before content */}
-        {renderInContentAd()}
-
-        <AnimatedSection delay={300}>
-          <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
-            {post.content.map((paragraph, index) => {
-              // Insert ad after the 3rd paragraph or heading
-              if (index === 3) {
-                return (
-                  <div key={index}>
-                    {paragraph.startsWith('## ') ? (
-                      <h2 className="text-2xl font-bold mt-10 mb-4">
-                        {paragraph.replace('## ', '')}
-                      </h2>
-                    ) : paragraph.startsWith('```') ? (
-                      <div className="my-6 overflow-auto rounded-lg bg-secondary/50 p-4">
-                        <pre>
-                          <code>
-                            {paragraph
-                              .split('\n')
-                              .slice(1, -1)
-                              .join('\n')}
-                          </code>
-                        </pre>
-                      </div>
-                    ) : (
-                      <p className="mb-6 leading-relaxed">{paragraph}</p>
-                    )}
-                    {renderInContentAd()}
-                  </div>
-                );
-              }
-
-              if (paragraph.startsWith('## ')) {
-                return (
-                  <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-                    {paragraph.replace('## ', '')}
-                  </h2>
-                );
-              } else if (paragraph.startsWith('```')) {
-                const code = paragraph.split('\n').slice(1, -1).join('\n');
-                return (
-                  <div
-                    key={index}
-                    className="my-6 overflow-auto rounded-lg bg-secondary/50 p-4"
-                  >
-                    <pre>
-                      <code>{code}</code>
-                    </pre>
-                  </div>
-                );
-              } else {
-                return (
-                  <p key={index} className="mb-6 leading-relaxed">
-                    {paragraph}
-                  </p>
-                );
-              }
-            })}
-          </div>
-        </AnimatedSection>
+        <AnimatedSection delay={300}>{renderContent()}</AnimatedSection>
 
         {/* Ad before related articles */}
         {renderInContentAd()}
@@ -231,10 +267,12 @@ const BlogPost = () => {
                     key={relatedPost.id}
                     to={`/blog/${relatedPost.id}`}
                     className="group"
-                    onClick={() => trackEvent('related_post_click', {
-                      from_post_id: post.id,
-                      to_post_id: relatedPost.id
-                    })}
+                    onClick={() =>
+                      trackEvent('related_post_click', {
+                        from_post_id: post.id,
+                        to_post_id: relatedPost.id,
+                      })
+                    }
                   >
                     <div className="flex gap-4">
                       <div className="w-24 h-24 flex-shrink-0 rounded-md overflow-hidden">

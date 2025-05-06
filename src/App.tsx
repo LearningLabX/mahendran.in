@@ -63,7 +63,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Helmet>
-            <title>Mahendran | Mobile App Development Expert</title>
+            <title>Mahendran | Mobile App Development</title>
             <meta
               name="description"
               content="Mobile app development blog, tutorials and resources for Flutter, React Native, Android and iOS developers."
@@ -94,8 +94,8 @@ const App = () => {
               <main className="min-h-screen">
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/resume" element={<Resume />} />
+                  {/* <Route path="/projects" element={<Projects />} /> */}
+                  {/* <Route path="/resume" element={<Resume />} /> */}
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:blogId" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
