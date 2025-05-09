@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -10,9 +9,9 @@ const navLinks = [
   { name: 'Home', path: '/' },
   // { name: 'Resume', path: '/resume' },
   { name: 'My Blogs', path: '/blog' },
-  { name: 'Games', path: '/games' },
+  // { name: 'Games', path: '/games' },
   { name: 'Tools', path: '/tools' },
-  { name: 'Templates', path: '/templates' },
+  // { name: 'Templates', path: '/templates' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -50,6 +49,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const isSideNavPage = pathname.includes('/tools');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +67,9 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        isSideNavPage
+          ? 'bg-transparent'
+          : isScrolled
           ? 'bg-background/80 backdrop-blur-lg shadow-sm'
           : 'bg-transparent'
       }`}
@@ -78,7 +80,7 @@ export default function Navbar() {
           <div className="flex flex-col leading-tight">
             <Link
               to="/"
-              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400"
+              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400 hover:from-purple-400 hover:to-primary transition-all duration-300"
             >
               Mahendran G
             </Link>
@@ -87,11 +89,10 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-
             className="md:hidden"
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -100,26 +101,34 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
-              <Link
+              <motion.div
                 key={link.name}
-                to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === link.path ? 'text-primary' : 'text-foreground/80'
-                }`}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                {link.name}
-              </Link>
+                <Link
+                  to={link.path}
+                  className={`text-sm font-medium transition-all duration-300 ease-in-out hover:text-primary hover:translate-y-[-1px] ${
+                    pathname === link.path ? 'text-primary' : 'text-foreground/80'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
             ))}
-            {/* <ThemeToggle /> */}
+            <ThemeToggle />
           </nav>
         </div>
       </div>
 
       {/* Mobile Navigation */}
       <motion.nav
-        className="md:hidden bg-background/95 backdrop-blur-lg border-t overflow-hidden"
+        className="md:hidden bg-background/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 overflow-hidden"
         initial={{ height: 0 }}
-        animate={{ height: mobileMenuOpen ? 'auto' : 0 }}
+        animate={{
+          height: mobileMenuOpen ? 'auto' : 0,
+          borderRadius: mobileMenuOpen ? '0' : '0 0 12px 12px',
+        }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
         <motion.div
@@ -140,16 +149,17 @@ export default function Navbar() {
             >
               <Link
                 to={link.path}
-                className={`block py-2.5 px-3 rounded-md transition-colors ${
+                className={`block py-2.5 px-3 rounded-md transition-all duration-300 ease-in-out ${
                   pathname === link.path
                     ? 'bg-primary/10 text-primary font-medium'
-                    : 'hover:bg-secondary'
+                    : 'hover:bg-secondary hover:translate-y-[-1px]'
                 }`}
               >
                 {link.name}
               </Link>
             </motion.div>
           ))}
+          <ThemeToggle />
         </motion.div>
       </motion.nav>
     </header>

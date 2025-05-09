@@ -8,6 +8,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 import { ArrowRight, Link } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import About from '@/components/home/About';
+import Navbar from '@/components/layout/Navbar';
 
 // Sample data for featured projects
 const featuredProjects: Project[] = [
@@ -73,6 +74,8 @@ const featuredPosts: BlogPost[] = [
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <Navbar />
+
       {/* Hero Section */}
       <Hero />
       {/* About Section */}

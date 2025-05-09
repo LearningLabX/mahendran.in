@@ -1,13 +1,20 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Copy, Check, ArrowDown, FileJson } from 'lucide-react';
 
 const JsonFormatterTool = () => {
-  const [input, setInput] = useState('{"name":"John","age":30,"city":"New York"}');
+  const [input, setInput] = useState(
+    '{"first_name":"Mahendran", "last_name":"G", "city":"Bangalore"}'
+  );
   const [output, setOutput] = useState('');
   const [indentSize, setIndentSize] = useState('2');
   const [copied, setCopied] = useState(false);
@@ -20,11 +27,11 @@ const JsonFormatterTool = () => {
       setOutput(formatted);
     } catch (error) {
       toast({
-        title: "Invalid JSON",
-        description: "Please check your input syntax",
-        variant: "destructive",
+        title: 'Invalid JSON',
+        description: 'Please check your input syntax',
+        variant: 'destructive',
       });
-      setOutput("Error: Invalid JSON");
+      setOutput('Error: Invalid JSON');
     }
   };
 
@@ -35,11 +42,11 @@ const JsonFormatterTool = () => {
       setOutput(minified);
     } catch (error) {
       toast({
-        title: "Invalid JSON",
-        description: "Please check your input syntax",
-        variant: "destructive",
+        title: 'Invalid JSON',
+        description: 'Please check your input syntax',
+        variant: 'destructive',
       });
-      setOutput("Error: Invalid JSON");
+      setOutput('Error: Invalid JSON');
     }
   };
 
@@ -47,17 +54,18 @@ const JsonFormatterTool = () => {
     try {
       JSON.parse(input);
       toast({
-        title: "JSON is valid",
-        description: "Your JSON syntax is correct",
-        variant: "default",
+        title: 'JSON is valid',
+        description: 'Your JSON syntax is correct',
+        variant: 'default',
       });
-      setOutput("JSON is valid ✓");
+      setOutput('JSON is valid ✓');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       toast({
-        title: "Invalid JSON",
+        title: 'Invalid JSON',
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive',
       });
       setOutput(`Error: ${errorMessage}`);
     }
@@ -68,8 +76,8 @@ const JsonFormatterTool = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
     toast({
-      title: "Copied!",
-      description: "JSON copied to clipboard",
+      title: 'Copied!',
+      description: 'JSON copied to clipboard',
     });
   };
 
@@ -85,7 +93,7 @@ const JsonFormatterTool = () => {
         <Button onClick={validateJson} variant="outline">
           Validate JSON
         </Button>
-        
+
         <div className="flex items-center space-x-2 ml-auto">
           <span className="text-sm">Indent:</span>
           <Select value={indentSize} onValueChange={setIndentSize}>
@@ -104,7 +112,7 @@ const JsonFormatterTool = () => {
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Input JSON:</label>
-        <Textarea 
+        <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Paste your JSON here..."
@@ -119,19 +127,23 @@ const JsonFormatterTool = () => {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label className="block text-sm font-medium">Output:</label>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             disabled={!output}
             onClick={handleCopy}
           >
-            {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
-            {copied ? "Copied" : "Copy"}
+            {copied ? (
+              <Check className="h-4 w-4 mr-1" />
+            ) : (
+              <Copy className="h-4 w-4 mr-1" />
+            )}
+            {copied ? 'Copied' : 'Copy'}
           </Button>
         </div>
-        <Textarea 
-          value={output} 
-          readOnly 
+        <Textarea
+          value={output}
+          readOnly
           className="font-mono h-48 bg-muted/50"
         />
       </div>

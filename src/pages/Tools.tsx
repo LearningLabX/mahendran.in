@@ -1,8 +1,8 @@
-
 import { Helmet } from 'react-helmet';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { ToolsSidebar } from '@/components/tools/ToolsSidebar';
 import { ToolsContent } from '@/components/tools/ToolsContent';
+import Navbar from '@/components/layout/Navbar';
 
 const Tools = () => {
   return (
