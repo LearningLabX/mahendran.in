@@ -20,6 +20,7 @@ import {
 import { motion } from 'framer-motion';
 import { useGoogleAdsense } from '@/hooks/useGoogleAdsense';
 import { Helmet } from 'react-helmet';
+import Navbar from '@/components/layout/Navbar';
 
 // Tech categories with icons - optimized for high CPC keywords
 const techCategories = [
@@ -80,6 +81,8 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-20">
+      <Navbar />
+
       <Helmet>
         <title>
           Mobile App Development Blog | Tips & Tutorials | Mahendran

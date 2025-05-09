@@ -17,6 +17,10 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import Games from './pages/Games';
+import Tools from './pages/Tools';
+import Templates from './pages/Templates';
+import DevDailyChallenge from './pages/DevDailyChallenge';
 
 // Layout Components
 import Navbar from './components/layout/Navbar';
@@ -62,7 +66,7 @@ const App = () => {
             <title>Mahendran | Mobile App Development</title>
             <meta
               name="description"
-              content="Mobile app development blog, tutorials and resources for Flutter, React Native, Android and iOS developers."
+              content="Mobile app development blog, tutorials and resources for Flutter, Android and iOS developers."
             />
             <meta
               name="keywords"
@@ -86,7 +90,7 @@ const App = () => {
           <AnimatePresence>
             <BrowserRouter>
               <PageTracker />
-              <Navbar />
+              {/* <Navbar /> */}
               <main className="min-h-screen">
                 <Routes>
                   <Route path="/" element={<Index />} />
@@ -95,6 +99,10 @@ const App = () => {
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:blogId" element={<BlogPost />} />
                   <Route path="/contact" element={<Contact />} />
+                  {/* <Route path="/games" element={<Games />} /> */}
+                  <Route path="/tools" element={<Tools />} />
+                  {/* <Route path="/templates" element={<Templates />} /> */}
+                  {/* <Route path="/daily-challenge" element={<DevDailyChallenge />} /> */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
